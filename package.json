@@ -3,29 +3,35 @@
   "description": "A simple starter with Redux to get up and developing quickly with Gatsby",
   "version": "0.0.1",
   "author": "Carl-Johan Kihl <carljohan.kihl@gmail.com>",
-  "contributors": ["Kyle Mathews <mathews.kyle@gmail.com>"],
+  "contributors": [
+    "Kyle Mathews <mathews.kyle@gmail.com>"
+  ],
   "dependencies": {
-    "@emotion/core": "^10.0.7",
-    "@emotion/styled": "^10.0.7",
-    "emotion-theming": "^10.0.7",
-    "gatsby": "^2.1.4",
-    "gatsby-image": "^2.0.29",
-    "gatsby-plugin-emotion": "^4.0.3",
-    "gatsby-plugin-manifest": "^2.0.17",
-    "gatsby-plugin-offline": "^2.0.23",
-    "gatsby-plugin-react-helmet": "^3.0.6",
-    "gatsby-plugin-sharp": "^2.0.20",
-    "gatsby-source-filesystem": "^2.0.20",
-    "gatsby-transformer-sharp": "^2.1.13",
+    "@emotion/core": "^10.0.9",
+    "@emotion/styled": "^10.0.9",
+    "emotion-theming": "^10.0.9",
+    "gatsby": "^2.1.30",
+    "gatsby-image": "^2.0.32",
+    "gatsby-plugin-emotion": "^4.0.6",
+    "gatsby-plugin-manifest": "^2.0.23",
+    "gatsby-plugin-offline": "^2.0.25",
+    "gatsby-plugin-react-helmet": "^3.0.9",
+    "gatsby-plugin-sharp": "^2.0.27",
+    "gatsby-source-filesystem": "^2.0.24",
+    "gatsby-transformer-json": "^2.1.10",
+    "gatsby-transformer-sharp": "^2.1.16",
     "prop-types": "^15.7.2",
-    "react": "^16.8.2",
-    "react-dom": "^16.8.2",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
     "react-helmet": "^5.2.0",
-    "react-redux": "^6.0.0",
-    "redux": "^4.0.1"
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   },
   "keywords": [
-    "gatsby", "redux", "emotion"
+    "gatsby",
+    "redux",
+    "emotion"
   ],
   "license": "MIT",
   "scripts": {
@@ -44,8 +50,8 @@
     "url": "https://github.com/caki0915/gatsby-starter-redux/issues"
   },
   "devDependencies": {
-    "eslint": "^5.14.0",
-    "eslint-config-prettier": "^4.0.0",
+    "eslint": "^5.15.1",
+    "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
     "prettier": "^1.16.4"
   }

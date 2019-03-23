@@ -1,0 +1,10 @@
+{
+  "first": {
+    "label": "Introduction",
+    "link": "/introduction"
+  },
+  "second": {
+    "label": "Style",
+    "link": "/style"
+  }
+}

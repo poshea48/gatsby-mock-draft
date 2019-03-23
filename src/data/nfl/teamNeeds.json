@@ -1,0 +1,36 @@
+[
+  {
+    "name": "default",
+    "teams": [
+      { "team": "ARI", "needs": ["WR", "DL", "CB"] },
+      { "team": "ATL", "needs": ["WR", "DL", "CB"] },
+      { "team": "BAL", "needs": ["WR", "DL", "CB"] },
+      { "team": "BUF", "needs": ["WR", "DL", "CB"] },
+      { "team": "CAR", "needs": ["WR", "DL", "CB"] },
+      { "team": "CHI", "needs": ["WR", "DL", "CB"] },
+      { "team": "CIN", "needs": ["WR", "DL", "CB"] },
+      { "team": "CLE", "needs": ["WR", "DL", "CB"] },
+      { "team": "DAL", "needs": ["WR", "DL", "CB"] },
+      { "team": "DEN", "needs": ["WR", "DL", "CB"] },
+      { "team": "DET", "needs": ["WR", "DL", "CB"] },
+      { "team": "GB", "needs": ["WR", "DL", "CB"] },
+      { "team": "HOU", "needs": ["WR", "DL", "CB"] },
+      { "team": "IND", "needs": ["WR", "DL", "CB"] },
+      { "team": "JAX", "needs": ["WR", "DL", "CB"] },
+      { "team": "KC", "needs": ["WR", "DL", "CB"] },
+      { "team": "MIA", "needs": ["WR", "DL", "CB"] },
+      { "team": "MIN", "needs": ["WR", "DL", "CB"] },
+      { "team": "NYG", "needs": ["WR", "DL", "CB"] },
+      { "team": "NYJ", "needs": ["WR", "DL", "CB"] },
+      { "team": "NE", "needs": ["WR", "DL", "CB"] },
+      { "team": "NO", "needs": ["WR", "DL", "CB"] },
+      { "team": "OAK", "needs": ["WR", "DL", "CB"] },
+      { "team": "PHI", "needs": ["WR", "DL", "CB"] },
+      { "team": "LAC", "needs": ["WR", "DL", "CB"] },
+      { "team": "SF", "needs": ["WR", "DL", "CB"] },
+      { "team": "TB", "needs": ["WR", "DL", "CB"] },
+      { "team": "TEN", "needs": ["WR", "DL", "CB"] },
+      { "team": "WAS", "needs": ["WR", "DL", "CB"] }
+    ]
+  }
+]
