@@ -91,7 +91,7 @@ class NFLDraftroom extends React.Component {
   componentDidMount() {
     const { nfl } = this.props;
     if (isEmpty(nfl.team)) {
-      return navigate('/setup');
+      return typeof window !== 'undefined' && navigate('/setup');
     }
     if (isEmpty(this.state.needs)) {
       let needs = this.props.data.teamNeedsJson.teams.filter(
