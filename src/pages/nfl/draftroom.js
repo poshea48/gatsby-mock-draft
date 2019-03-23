@@ -220,8 +220,7 @@ class NFLDraftroom extends React.Component {
     const { nfl } = this.props;
 
     if (isEmpty(nfl) || isEmpty(nfl.team)) {
-      navigate('/setup');
-      return null;
+      return <Redirect to="/setup" />;
     }
     const {
       players,
