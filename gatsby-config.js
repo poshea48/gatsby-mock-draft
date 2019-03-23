@@ -1,3 +1,8 @@
+const dotenv = require('dotenv');
+
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 module.exports = {
   siteMetadata: {
     title: `Mock Draft`,
@@ -7,12 +12,12 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `images`,
-        path: `${__dirname}/src/images`,
-      },
+    // {
+    //   resolve: `gatsby-source-filesystem`,
+    //   options: {
+    //     name: `images`,
+    //     path: `${__dirname}/src/images`,
+    //   },
     },
     'gatsby-transformer-json',
     {
@@ -36,6 +41,13 @@ module.exports = {
       },
     },
     'gatsby-plugin-emotion',
+    {
+      resolve: 'gatsby-source-contentful',
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.app/offline
     // 'gatsby-plugin-offline',

@@ -81,7 +81,7 @@ class NFLDraftroom extends React.Component {
       started: false,
       paused: false,
       finished: false,
-      players: this.props.data.allPlayersJson.edges.map(node => node.node),
+      players: this.props.data.allContentfulProspects2019.edges[0].node.player,
       draftedPlayers: [],
       filterBy: 'OVERALL',
       myTeam: [],
@@ -332,17 +332,19 @@ export const query = graphql`
       }
     }
 
-    allPlayersJson {
+    allContentfulProspects2019 {
       edges {
         node {
-          name
-          overallRank
-          school
-          year
-          pos
-          posRank
-          height
-          weight
+          player {
+            name
+            pos
+            school
+            year
+            overallRank
+            posRank
+            height
+            weight
+          }
         }
       }
     }
