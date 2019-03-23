@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, navigate } from 'gatsby';
+import { graphql } from 'gatsby';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import styled from '@emotion/styled';
