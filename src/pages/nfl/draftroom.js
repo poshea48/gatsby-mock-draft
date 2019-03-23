@@ -3,7 +3,6 @@ import { graphql, navigate } from 'gatsby';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import Layout from '../../components/layout/';
-import DraftRoomSelection from '../../components/draftroom/draftRoomSelection';
 import DraftOrder from '../../components/draftroom/draftOrder';
 import AvailablePlayers from '../../components/draftroom/availablePlayers';
 import isEmpty from '../../validation/is-empty';
