@@ -155,8 +155,12 @@ class NFLDraftroom extends React.Component {
   };
 
   getTeamToPick = () => {
-    const element = document.getElementById(`${this.state.currentPick}`);
-    return element ? element.dataset.team : '';
+    if (document) {
+      const element = document.getElementById(`${this.state.currentPick}`);
+      return element ? element.dataset.team : '';
+    } else {
+      return '';
+    }
   };
 
   simulatePick = () => {
@@ -218,7 +222,7 @@ class NFLDraftroom extends React.Component {
 
   render() {
     const { nfl } = this.props;
-
+    const teamToPick = this.getTeamToPick();
     const {
       players,
       filterBy,
@@ -291,7 +295,7 @@ class NFLDraftroom extends React.Component {
                 draftButton={this.draftMyPlayer}
                 draftStarted={this.state.started}
                 myTeam={nfl.team}
-                teamToPick={this.getTeamToPick()}
+                teamToPick={this.teamToPick}
                 players={
                   filterBy === 'OVERALL'
                     ? players
