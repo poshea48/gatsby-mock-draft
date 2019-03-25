@@ -30,7 +30,7 @@ const Button = styled.button`
   color: white;
   border-radius: 10px;
   width: 110px;
-  tex-align: center;
+  text-align: center;
   padding: 0.2em;
   cursor: pointer;
   &:disabled {
