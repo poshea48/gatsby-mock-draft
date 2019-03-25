@@ -155,11 +155,11 @@ class NFLDraftroom extends React.Component {
   };
 
   getTeamToPick = () => {
-    if (document) {
+    if (typeof document === 'undefined') {
+      return '';
+    } else {
       const element = document.getElementById(`${this.state.currentPick}`);
       return element ? element.dataset.team : '';
-    } else {
-      return '';
     }
   };
 
