@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, navigate } from 'gatsby';
-import { Redirect } from 'react-router-dom';
 import styled from '@emotion/styled';
 import Layout from '../components/layout/';
 import SEO from '../components/seo';
