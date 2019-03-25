@@ -81,6 +81,9 @@ class NFLDraftroom extends React.Component {
       paused: false,
       finished: false,
       players: this.props.data.allContentfulProspects2019.edges[0].node.player,
+      draftOrder: this.props.data.allContentfulDraftOrder2019.edges[0].node.teams.map(
+        team => team.content,
+      ),
       draftedPlayers: [],
       filterBy: 'OVERALL',
       myTeam: [],
@@ -155,12 +158,7 @@ class NFLDraftroom extends React.Component {
   };
 
   getTeamToPick = () => {
-    if (typeof document === 'undefined') {
-      return '';
-    } else {
-      const element = document.getElementById(`${this.state.currentPick}`);
-      return element ? element.dataset.team : '';
-    }
+    return this.state.draftOrder[this.state.currentPick - 1] || '';
   };
 
   simulatePick = () => {
@@ -229,7 +227,9 @@ class NFLDraftroom extends React.Component {
       myTeam,
       needs,
       currentPick,
+      currentRound,
       draftedPlayers,
+      draftOrder,
     } = this.state;
 
     return (
@@ -263,9 +263,11 @@ class NFLDraftroom extends React.Component {
           </Top>
           <Teams>
             <DraftOrder
+              draftOrder={draftOrder}
               myTeam={nfl.team}
               draftedPlayers={draftedPlayers}
               currentPick={currentPick}
+              currentRound={currentRound}
             />
           </Teams>
           <Main>
@@ -294,8 +296,9 @@ class NFLDraftroom extends React.Component {
               <AvailablePlayers
                 draftButton={this.draftMyPlayer}
                 draftStarted={this.state.started}
+                teamToPick={this.getTeamToPick()}
                 myTeam={nfl.team}
-                teamToPick={this.teamToPick}
+                currentPick={currentPick}
                 players={
                   filterBy === 'OVERALL'
                     ? players
@@ -345,6 +348,16 @@ export const query = graphql`
             posRank
             height
             weight
+          }
+        }
+      }
+    }
+
+    allContentfulDraftOrder2019 {
+      edges {
+        node {
+          teams {
+            content
           }
         }
       }

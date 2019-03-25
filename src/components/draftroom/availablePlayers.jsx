@@ -41,9 +41,10 @@ const Button = styled.button`
 const AvailablePlayers = ({
   players,
   draftButton,
-  teamToPick,
+  currentPick,
   myTeam,
   draftStarted,
+  teamToPick,
 }) => (
   <Table>
     <RowItemHeader>
