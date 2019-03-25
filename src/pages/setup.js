@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import { Redirect } from 'react-router-dom';
 import styled from '@emotion/styled';
 import Layout from '../components/layout/';
@@ -141,7 +141,8 @@ class SetupPage extends React.Component {
     if (this.state.draftType === 'nfl') {
       setupInfo = { type: 'nfl', ...this.state.nfl };
       const result = await this.props.setupNflDraftroom(setupInfo);
-      return <Redirect to="/nfl/draftroom" />;
+      navigate('/nfl/draftroom');
+      return null;
     } else {
       setupInfo = { type: 'fantasy', ...this.state.fantasy };
       this.props.setupFantasyDraftroom(setupInfo);

@@ -1,7 +1,6 @@
 import React from 'react';
-import { graphql } from 'gatsby';
+import { graphql, navigate } from 'gatsby';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import styled from '@emotion/styled';
 import Layout from '../../components/layout/';
 import DraftOrder from '../../components/draftroom/draftOrder';
@@ -92,7 +91,8 @@ class NFLDraftroom extends React.Component {
   componentDidMount() {
     const { nfl } = this.props;
     if (isEmpty(nfl.team)) {
-      return <Redirect to="/setup" />;
+      navigate('/setup');
+      return null;
     }
     if (isEmpty(this.state.needs)) {
       let needs = this.props.data.teamNeedsJson.teams.filter(
@@ -220,7 +220,8 @@ class NFLDraftroom extends React.Component {
     const { nfl } = this.props;
 
     if (isEmpty(nfl) || isEmpty(nfl.team)) {
-      return <Redirect to="/setup" />;
+      navigate('/setup');
+      return null;
     }
     const {
       players,
