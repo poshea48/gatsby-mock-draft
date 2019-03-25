@@ -219,10 +219,6 @@ class NFLDraftroom extends React.Component {
   render() {
     const { nfl } = this.props;
 
-    if (isEmpty(nfl) || isEmpty(nfl.team)) {
-      navigate('/setup');
-      return null;
-    }
     const {
       players,
       filterBy,
@@ -237,7 +233,8 @@ class NFLDraftroom extends React.Component {
         <Container color="blueSteal">
           <Top>
             <h3 style={{ textAlign: 'center' }}>
-              {nflTeams[nfl.team].fullName} Draft Room
+              {(nfl.team && nflTeams[nfl.team].fullName) || `...Loading`} Draft
+              Room
             </h3>
             <div style={{ textAlign: 'center', borderRadius: '10px' }}>
               <DraftButton
