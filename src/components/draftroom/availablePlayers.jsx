@@ -5,7 +5,8 @@ import styled from '@emotion/styled';
 const Table = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr
-  grid-auto-rows: 200px;
+  grid-auto-rows: auto;
+  overflow-x: scroll;
 `;
 
 const NameField = styled.div``;
@@ -14,6 +15,13 @@ const RowItem = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   margin-bottom: 10px;
+  @media (max-width: 500px) {
+    font-size: 85%;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 70%;
+  }
 `;
 
 const RowItemHeader = styled(RowItem)`

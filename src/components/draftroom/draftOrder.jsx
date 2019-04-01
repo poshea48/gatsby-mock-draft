@@ -1,6 +1,6 @@
 import React from 'react';
 import { StaticQuery, graphql } from 'gatsby';
-import Scroll from '../common/scroll';
+// import Scroll from '../common/scroll';
 import styled from '@emotion/styled';
 import NFLTEAMS from '../../constants/nflTeams';
 
@@ -8,26 +8,75 @@ const Container = styled.div`
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 2;
+  ${'' /* @media (max-width: 860px) {
+    display: flex;
+    flex-direction: row;
+  } */}
+`;
+
+const Scroll = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 440px;
+  margin-bottom: 10px;
+  align-items: stretch;
+  @media (max-width: 860px) {
+    flex-direction: row;
+    height: 65px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    max-width: 100vw;
+    margin-right: 1em;
+  }
 `;
 
 const Team = styled.div`
   display: flex;
+  width: 180px;
   flex-direction: column;
   color: ${p => (p.myTeam ? 'red' : 'black')};
   background: ${p => (p.myTeam ? 'yellow' : 'white')};
   font-weight: ${p => (p.myTeam ? 600 : 'normal')};
-  margin-bottom: 1em;
+  padding-bottom: 3.5em;
+  @media (max-width: 860px) {
+    width: 200px;
+    height: 80px;
+
+    margin-right: 5px;
+    margin-bottom: 0;
+  }
 `;
 
 class DraftOrder extends React.Component {
   state = {
-    currentRound: this.props.currentRound,
-    currentPick: this.props.currentPick,
+    round: 1,
   };
 
   scrollToCurrentPick = pick => {
-    const li = document.getElementById(pick);
-    li && li.scrollIntoView(true, { block: 'start' }, { behavior: 'smooth' });
+    let container = document.getElementById('scroll');
+
+    let target = document.getElementById(pick);
+    // container.scrollTop = target;
+    if (container.scrollTop === 0) {
+      container.scrollLeft += 185;
+    } else {
+      console.log('Paul here');
+      target.scrollIntoView(true);
+    }
+    // if (horizontal) {
+    //   return;
+    // } else {
+    //   const li = document.getElementById(pick);
+    //   li &&
+    //     li.scrollIntoView(
+    //       true,
+    //       { block: 'start' },
+    //       { behavior: 'smooth' },
+    //       { inline: 'nearest' },
+    //     );
+    // }
   };
 
   showPlayerDrafted = player => {
@@ -40,17 +89,17 @@ class DraftOrder extends React.Component {
     let player;
     if (currentPick === pickNumber) {
       return (
-        <div style={{ fontWeight: '600', color: 'red' }}>
+        <p style={{ fontWeight: '600', color: 'red', margin: 0 }}>
           !! Current Pick !!
-        </div>
+        </p>
       );
     } else if (
       (player = draftedPlayers.filter(p => p.pick === pickNumber)[0])
     ) {
       return (
-        <div>
+        <p style={{ margin: 0 }}>
           <small>{player.name}</small> - <small>{player.pos}</small>
-        </div>
+        </p>
       );
     } else {
       return '';
@@ -72,6 +121,12 @@ class DraftOrder extends React.Component {
     }
   }
 
+  updateRound = async () => {
+    let round = this.state.round;
+    await this.setState({ round: round + 1 });
+    return;
+  };
+
   render() {
     const {
       draftedPlayers,
@@ -82,28 +137,26 @@ class DraftOrder extends React.Component {
     } = this.props;
     draftedPlayers &&
       draftedPlayers.sort((team1, team2) => team1.pick - team2.pick);
-
     return (
       <Container>
-        <Scroll size="reg">
+        <h3>Round: {this.state.round}</h3>
+        <Scroll size="reg" id="scroll">
           {draftOrder.map((team, i) => {
             return (
-              <div key={i}>
-                {i % 32 === 0 ? (
-                  <h3>Round {i - 32 + 1 > 0 ? i - 32 + 2 : 1}</h3>
-                ) : (
-                  ''
-                )}
-                <Team myTeam={team === myTeam} id={i + 1} data-team={team}>
-                  <div>
-                    {i + 1}.{' '}
-                    {team === myTeam ? 'Your Pick' : NFLTEAMS[team].shortName}
-                  </div>
-                  <div style={{ marginLeft: '0.5em' }}>
-                    {this.addDetails(i + 1)}
-                  </div>
-                </Team>
-              </div>
+              <Team
+                key={i}
+                myTeam={team === myTeam}
+                id={i + 1}
+                data-team={team}
+              >
+                <div style={{ width: '180px' }}>
+                  {i + 1}.{' '}
+                  {team === myTeam ? 'Your Pick' : NFLTEAMS[team].shortName}
+                </div>
+                <div style={{ marginLeft: '0.5em' }}>
+                  {this.addDetails(i + 1)}
+                </div>
+              </Team>
             );
           })}
         </Scroll>

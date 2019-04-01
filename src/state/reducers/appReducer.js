@@ -1,7 +1,8 @@
-import { TOGGLE_DRAWER } from '../types';
+import { TOGGLE_DRAWER, TOGGLE_PLAYERS_MODAL } from '../types';
 
 const initialState = {
   isDrawerOpen: false,
+  isPlayersModalOpen: false,
 };
 
 export default (state = initialState, action) => {
@@ -9,6 +10,8 @@ export default (state = initialState, action) => {
   switch (type) {
     case TOGGLE_DRAWER:
       return { ...state, isDrawerOpen: payload };
+    case TOGGLE_PLAYERS_MODAL:
+      return { ...state, isPlayersModalOpen: payload };
     default:
       return state;
   }

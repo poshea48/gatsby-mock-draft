@@ -8,6 +8,7 @@ import AvailablePlayers from '../../components/draftroom/availablePlayers';
 import isEmpty from '../../validation/is-empty';
 import nflTeams from '../../constants/nflTeams';
 import MyTeam from '../../components/draftroom/myTeam';
+import { togglePlayersModal } from '../../state/actions/appActions';
 
 const Container = styled.div`
   display: grid;
@@ -18,6 +19,17 @@ const Container = styled.div`
     'teams main players';
   border-radius: 5px;
   padding: 1em 0;
+  @media (max-width: 860px) {
+    grid-template-columns: 100%;
+
+    grid-template-areas:
+      'header '
+      'teams'
+      'main';
+  }
+  ${'' /* @media (max-width: 680px) {
+    grid-template-areas: 'header header header';
+  } */}
 `;
 
 const Top = styled.div`
@@ -30,6 +42,73 @@ const Teams = styled.div`
 
 const Players = styled.div`
   grid-area: players;
+  @media (max-width: 860px) {
+    display: ${p => (p.isPlayersModalOpen ? 'flex' : 'none')};
+    position: fixed;
+    z-index: 200;
+    flex-direction: column;
+
+    width: 90%;
+    left: 5%;
+    right: 5%;
+
+    background: white;
+    transition: transform 0.3s ease-in-out;
+    opacity: ${p => (p.isPlayersModalOpen ? 1 : 0)}
+    ${
+      '' /* transform: translateX(
+      ${p => (p.isPlayerModalOpen ? 20 : `-${p.theme.size(16)}`)} */
+    }
+    );
+  }
+`;
+
+const PlayersModalButton = styled.div`
+  display: none;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 1em;
+  @media (max-width: 860px) {
+    display: block;
+  }
+`;
+
+const PlayersModal = styled.div`
+  position: fixed;
+  z-index: ${p => p.theme.zIndex.drawer};
+  display: flex;
+  flex-direction: column;
+  top: 50;
+  left: 50;
+  width: 200px;
+  background: ${p => p.theme.palette.secondary.main};
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(
+    ${p => (p.isPlayerModalOpen ? 0 : `-${p.theme.size(16)}`)}
+  );
+`;
+//   transition: transform 0.3s ease-in-out;
+//   transform: perspective(200px)
+//     ${p =>
+//       p.isPlayerModalOpen
+//         ? `translateX(${p.theme.size(8)}) translateZ(-20px)`
+//         : 'none'};
+//   padding-top: ${p => p.theme.size(1)};
+//   padding-left: ${p => p.theme.size(1)};
+//   padding-right: ${p => p.theme.size(1)};
+// `;
+
+const Overlay = styled.div`
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  background: black;
+  width: 100vw;
+  height: 100vh;
+  transition: opacity 0.3s ease-in-out;
+  opacity: ${p => (p.isPlayersModalOpen ? 0.8 : 0)};
+  pointer-events: ${p => (p.isPlayersModalOpen ? 'all' : 'none')};
 `;
 
 const Main = styled.div`
@@ -217,7 +296,6 @@ class NFLDraftroom extends React.Component {
     });
     this.startDraft();
   };
-
   render() {
     const { nfl } = this.props;
     const teamToPick = this.getTeamToPick();
@@ -234,12 +312,28 @@ class NFLDraftroom extends React.Component {
 
     return (
       <Layout>
+        <Overlay
+          onClick={() => this.props.togglePlayersModal(false)}
+          isPlayersModalOpen={this.props.app.isPlayersModalOpen}
+        />
         <Container color="blueSteal">
           <Top>
             <h3 style={{ textAlign: 'center' }}>
               {(nfl.team && nflTeams[nfl.team].fullName) || `...Loading`} Draft
               Room
             </h3>
+            <PlayersModalButton>
+              <small
+                onClick={() =>
+                  this.props.togglePlayersModal(
+                    !this.props.app.isPlayersModalOpen,
+                  )
+                }
+                style={{ textDecoration: 'underline', cursor: 'pointer' }}
+              >
+                Players Drafted
+              </small>
+            </PlayersModalButton>
             <div style={{ textAlign: 'center', borderRadius: '10px' }}>
               <DraftButton
                 disabled={this.state.started || this.state.finished}
@@ -309,7 +403,7 @@ class NFLDraftroom extends React.Component {
               <p>...loading</p>
             )}
           </Main>
-          <Players>
+          <Players isPlayersModalOpen={this.props.app.isPlayersModalOpen}>
             <MyTeam
               players={myTeam}
               needs={needs}
@@ -372,7 +466,14 @@ const mapStateToProps = state => {
   };
 };
 
+// export default connect(
+//   mapStateToProps,
+//   dispatch => ({
+//     togglePlayersModal: open => dispatch(togglePlayersModal(open)),
+//   }),
+// )(NFLDraftroom);
+
 export default connect(
   mapStateToProps,
-  {},
+  { togglePlayersModal },
 )(NFLDraftroom);
