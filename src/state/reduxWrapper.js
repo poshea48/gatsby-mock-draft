@@ -35,8 +35,10 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 // const createStore = () => reduxCreateStore(rootReducer);
-export default ({ element }) => (
-  <Provider store={initStore()}>{element}</Provider>
+export default ({ element, props }) => (
+  <Provider {...props} store={initStore()}>
+    {element}
+  </Provider>
 );
 
 // import React from 'react';

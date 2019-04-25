@@ -59,23 +59,25 @@ const Layout = ({ children, isDrawerOpen, toggleDrawer }) => (
       }
     `}
     render={data => (
-      <ThemeProvider theme={theme}>
-        <Container>
-          <Header siteTitle={data.site.siteMetadata.title} />
+      <React.StrictMode>
+        <ThemeProvider theme={theme}>
+          <Container>
+            <Header siteTitle={data.site.siteMetadata.title} />
 
-          <Content isDrawerOpen={isDrawerOpen}>{children}</Content>
-          <Footer
-            author={data.site.siteMetadata.author}
-            createdAt={data.site.siteMetadata.createdAt}
+            <Content isDrawerOpen={isDrawerOpen}>{children}</Content>
+            <Footer
+              author={data.site.siteMetadata.author}
+              createdAt={data.site.siteMetadata.createdAt}
+            />
+          </Container>
+
+          <Overlay
+            isDrawerOpen={isDrawerOpen}
+            onClick={() => toggleDrawer(false)}
           />
-        </Container>
-
-        <Overlay
-          isDrawerOpen={isDrawerOpen}
-          onClick={() => toggleDrawer(false)}
-        />
-        <Drawer />
-      </ThemeProvider>
+          <Drawer />
+        </ThemeProvider>
+      </React.StrictMode>
     )}
   />
 );

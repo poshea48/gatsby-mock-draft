@@ -191,23 +191,23 @@ class SetupPage extends React.Component {
 //   fantasy: PropTypes.object.isRequired,
 // };
 
-// const mapStateToProps = state => {
-//   return {
-//     nfl: state.nfl,
-//     fantasy: state.fantasy,
-//   };
-// };
-//
-// export default connect(
-//   mapStateToProps,
-//   { setupNflDraftroom, setupFantasyDraftroom },
-// )(SetupPage);
+const mapStateToProps = state => {
+  return {
+    nfl: state.nfl,
+    fantasy: state.fantasy,
+  };
+};
 
 export default connect(
-  state => ({ nfl: state.nfl, fantasy: state.fantasy }),
-  dispatch => ({
-    setupNflDraftroom: setupInfo => dispatch(setupNflDraftroom(setupInfo)),
-    setupFantasyDraftroom: setupInfo =>
-      dispatch(setupFantasyDraftroom(setupInfo)),
-  }),
+  mapStateToProps,
+  { setupNflDraftroom, setupFantasyDraftroom },
 )(SetupPage);
+
+// export default connect(
+//   state => ({ nfl: state.nfl, fantasy: state.fantasy }),
+//   dispatch => ({
+//     setupNflDraftroom: setupInfo => dispatch(setupNflDraftroom(setupInfo)),
+//     setupFantasyDraftroom: setupInfo =>
+//       dispatch(setupFantasyDraftroom(setupInfo)),
+//   }),
+// )(SetupPage);

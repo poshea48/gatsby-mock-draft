@@ -9,6 +9,7 @@ import isEmpty from '../../validation/is-empty';
 import nflTeams from '../../constants/nflTeams';
 import MyTeam from '../../components/draftroom/myTeam';
 import { togglePlayersModal } from '../../state/actions/appActions';
+import { setupNflDraftroom } from '../../state/actions/nflActions';
 
 const Container = styled.div`
   display: grid;
@@ -165,7 +166,7 @@ class NFLDraftroom extends React.Component {
       ),
       draftedPlayers: [],
       filterBy: 'OVERALL',
-      myTeam: [],
+      myTeam: [], //JSON.parse(localStorage.getItem('nflSetupStore')).team || [],
       needs: [],
     };
   }
@@ -173,10 +174,16 @@ class NFLDraftroom extends React.Component {
   componentDidMount() {
     const { nfl } = this.props;
     if (isEmpty(nfl.team)) {
-      navigate('/setup');
+      let localData = JSON.parse(localStorage.getItem('nflSetupStore'));
+      if (localData.team) {
+        this.props.setupNflDraftroom(localData);
+      } else {
+        navigate('/setup');
+      }
       return null;
     }
     if (isEmpty(this.state.needs)) {
+      console.log(nfl);
       let needs = this.props.data.teamNeedsJson.teams.filter(
         teamNeeds => teamNeeds.team === nfl.team,
       )[0].needs;
@@ -309,7 +316,6 @@ class NFLDraftroom extends React.Component {
       draftedPlayers,
       draftOrder,
     } = this.state;
-
     return (
       <Layout>
         <Overlay
@@ -475,5 +481,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { togglePlayersModal },
+  { togglePlayersModal, setupNflDraftroom },
 )(NFLDraftroom);

@@ -39,7 +39,7 @@ const Team = styled.div`
   color: ${p => (p.myTeam ? 'red' : 'black')};
   background: ${p => (p.myTeam ? 'yellow' : 'white')};
   font-weight: ${p => (p.myTeam ? 600 : 'normal')};
-  padding-bottom: 3.5em;
+  padding-bottom: 1.5em;
   @media (max-width: 860px) {
     width: 200px;
     height: 80px;
@@ -65,18 +65,6 @@ class DraftOrder extends React.Component {
       console.log('Paul here');
       target.scrollIntoView(true);
     }
-    // if (horizontal) {
-    //   return;
-    // } else {
-    //   const li = document.getElementById(pick);
-    //   li &&
-    //     li.scrollIntoView(
-    //       true,
-    //       { block: 'start' },
-    //       { behavior: 'smooth' },
-    //       { inline: 'nearest' },
-    //     );
-    // }
   };
 
   showPlayerDrafted = player => {
@@ -114,6 +102,7 @@ class DraftOrder extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.currentPick !== this.props.currentPick) {
+      console.log('I should be scrolling');
       this.scrollToCurrentPick(this.props.currentPick);
     }
 
@@ -139,7 +128,7 @@ class DraftOrder extends React.Component {
       draftedPlayers.sort((team1, team2) => team1.pick - team2.pick);
     return (
       <Container>
-        <h3>Round: {this.state.round}</h3>
+        <h3>Current Round: {currentRound}</h3>
         <Scroll size="reg" id="scroll">
           {draftOrder.map((team, i) => {
             return (
