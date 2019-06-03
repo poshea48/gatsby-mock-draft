@@ -18,6 +18,7 @@ const Container = styled.div`
 
 const Title = styled.h1`
   text-align: center;
+  font-family: monospace;
 `;
 
 const Form = styled.form`
@@ -70,6 +71,11 @@ const Button = styled.button`
   user-select: none;
   transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
     box-shadow 0.1s ease, background 0.1s ease;
+
+  &:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
 `;
 
 const Header = styled.h3`
@@ -139,6 +145,7 @@ class SetupPage extends React.Component {
     let setupInfo;
     if (this.state.draftType === 'nfl') {
       setupInfo = { type: 'nfl', ...this.state.nfl };
+      console.log(this.state);
       const result = await this.props.setupNflDraftroom(setupInfo);
       navigate('/nfl/draftroom');
       return null;
@@ -174,9 +181,17 @@ class SetupPage extends React.Component {
             </FormGroup>
             <FormGroup hidden={this.state.fantasy.hidden}>
               <Header>Fantasy Draft Settings</Header>
+              <small style={{ margin: '0 auto' }}> ** Not set up yet **</small>
             </FormGroup>
 
-            <Button onClick={this.handleSubmit}>Setup Your Draft Room</Button>
+            <Button
+              onClick={this.handleSubmit}
+              disabled={
+                this.state.draftType === 'fantasy' || this.state.nfl.team === ''
+              }
+            >
+              Setup Your Draft Room
+            </Button>
           </Form>
         </Container>
       </Layout>

@@ -13,13 +13,13 @@ import { setupNflDraftroom } from '../../state/actions/nflActions';
 
 const Container = styled.div`
   display: grid;
-  grid-gap: 2em 2em;
+  grid-gap: 1em 1em;
   grid-template-columns: 20% auto auto;
   grid-template-areas:
     'header header header'
     'teams main players';
   border-radius: 5px;
-  padding: 1em 0;
+  padding: 0;
   @media (max-width: 860px) {
     grid-template-columns: 100%;
 
@@ -175,7 +175,7 @@ class NFLDraftroom extends React.Component {
     const { nfl } = this.props;
     if (isEmpty(nfl.team)) {
       let localData = JSON.parse(localStorage.getItem('nflSetupStore'));
-      if (localData.team) {
+      if (localData) {
         this.props.setupNflDraftroom(localData);
       } else {
         navigate('/setup');

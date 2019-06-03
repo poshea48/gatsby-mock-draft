@@ -1,5 +1,4 @@
 import React from 'react';
-import Scroll from '../common/scroll';
 import styled from '@emotion/styled';
 
 const Table = styled.div`
@@ -7,6 +6,13 @@ const Table = styled.div`
   grid-template-columns: 2fr 1fr 1fr 1fr
   grid-auto-rows: auto;
   overflow-x: scroll;
+  height: 50vh;
+  @media (max-width: 860px) {
+    height: 30vh;
+  }
+  @media (max-width: 480px) {
+    height: 33vh;
+  }
 `;
 
 const NameField = styled.div``;
@@ -61,29 +67,27 @@ const AvailablePlayers = ({
       <span>School</span>
       <span>year</span>
     </RowItemHeader>
-    <Scroll size="mid" style={{ marginLeft: '0' }}>
-      {players.map((player, i) => (
-        <RowItem key={player.name}>
-          <PlayerField>
-            <span>
-              {i + 1}. {player.name}
-            </span>
-            <span>
-              <Button
-                onClick={draftButton}
-                disabled={myTeam !== teamToPick || !draftStarted}
-                data-name={player.name}
-              >
-                Draft Player
-              </Button>
-            </span>
-          </PlayerField>
-          <span>{player.pos}</span>
-          <span>{player.school}</span>
-          <span>{player.year}</span>
-        </RowItem>
-      ))}
-    </Scroll>
+    {players.map((player, i) => (
+      <RowItem key={player.name}>
+        <PlayerField>
+          <span>
+            {i + 1}. {player.name}
+          </span>
+          <span>
+            <Button
+              onClick={draftButton}
+              disabled={myTeam !== teamToPick || !draftStarted}
+              data-name={player.name}
+            >
+              Draft Player
+            </Button>
+          </span>
+        </PlayerField>
+        <span>{player.pos}</span>
+        <span>{player.school}</span>
+        <span>{player.year}</span>
+      </RowItem>
+    ))}
   </Table>
 );
 

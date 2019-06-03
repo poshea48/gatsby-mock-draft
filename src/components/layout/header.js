@@ -21,8 +21,9 @@ const GroupedIcons = styled.div`
 const AuthButtons = styled(GroupedIcons)`
   width: 35%;
   padding: 10px 0;
+
   @media (max-width: 420px) {
-    flex-direction: column;
+    display: none;
   }
 `;
 
@@ -54,6 +55,7 @@ const Top = styled.div`
 
 const Title = styled.h2`
   color: ${p => p.theme.palette.primary.contrast};
+  font-family: 'Gill Sans', sans-serif;
   font-size: 30px;
   margin: 9px 0;
   white-space: nowrap;
@@ -71,7 +73,7 @@ const StyledLink = styled(Link)`
 const Button = styled.button`
   background: ${p => p.theme.color.auth};
   border-radius: 10px;
-  width: 50%;
+  width: 100px;
   font-size: 0.8rem;
   cursor: pointer;
   &:first-of-type {

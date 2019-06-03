@@ -17,6 +17,10 @@ const LinksContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -30,6 +34,8 @@ const Button = styled.button`
   border-radius: 10px;
   width: 160px;
   font-size: 0.8rem;
+  align-self: center;
+  margin: 0.5em;
 `;
 const IndexPage = () => (
   <Layout>

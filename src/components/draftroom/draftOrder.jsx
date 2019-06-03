@@ -40,6 +40,7 @@ const Team = styled.div`
   background: ${p => (p.myTeam ? 'yellow' : 'white')};
   font-weight: ${p => (p.myTeam ? 600 : 'normal')};
   padding-bottom: 1.5em;
+  margin-left: 0.8em;
   @media (max-width: 860px) {
     width: 200px;
     height: 80px;
@@ -49,6 +50,17 @@ const Team = styled.div`
   }
 `;
 
+// One day => break up into DraftOrderList and DraftOrderListItem
+// use ref on DraftOrderListItem to scroll to top
+// this.teamRef = React.createRef()
+// ref={this.teamRef}
+// componentDidMount => this.teamRef.current => scrollIntoView
+// or for functional components...
+// const teamRef = useRef(null)
+// ref={teamRef}
+// useEffect(() => {
+//    teamRef.current.scrollIntoView
+//})
 class DraftOrder extends React.Component {
   state = {
     round: 1,
@@ -59,12 +71,14 @@ class DraftOrder extends React.Component {
 
     let target = document.getElementById(pick);
     // container.scrollTop = target;
-    if (container.scrollTop === 0) {
-      container.scrollLeft += 185;
-    } else {
-      console.log('Paul here');
-      target.scrollIntoView(true);
-    }
+    target.scrollIntoView(true);
+
+    // if (container.scrollTop === 0) {
+    //   container.scrollLeft += 185;
+    // } else {
+    //   console.log('Paul here');
+    //   target.scrollIntoView(true);
+    // }
   };
 
   showPlayerDrafted = player => {
@@ -95,14 +109,16 @@ class DraftOrder extends React.Component {
   };
 
   componentDidMount() {
+    console.log('mounting');
     if (this.props.currentPick !== 1) {
       this.scrollToCurrentPick(this.props.currentPick);
     }
   }
 
   componentDidUpdate(prevProps) {
+    console.log('updating');
     if (prevProps.currentPick !== this.props.currentPick) {
-      console.log('I should be scrolling');
+      console.log('updating with prevprops.currentPick diff');
       this.scrollToCurrentPick(this.props.currentPick);
     }
 
@@ -128,7 +144,7 @@ class DraftOrder extends React.Component {
       draftedPlayers.sort((team1, team2) => team1.pick - team2.pick);
     return (
       <Container>
-        <h3>Current Round: {currentRound}</h3>
+        <h3 style={{ textAlign: 'center' }}>Round: {currentRound}</h3>
         <Scroll size="reg" id="scroll">
           {draftOrder.map((team, i) => {
             return (
