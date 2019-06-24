@@ -6,7 +6,7 @@ const Table = styled.div`
   grid-template-columns: 2fr 1fr 1fr 1fr
   grid-auto-rows: auto;
   overflow-x: scroll;
-  height: 50vh;
+  max-height: 50vh;
   @media (max-width: 860px) {
     height: 30vh;
   }

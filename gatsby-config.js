@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-
+const path = require('path');
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
@@ -12,13 +12,13 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
-    // {
-    //   resolve: `gatsby-source-filesystem`,
-    //   options: {
-    //     name: `images`,
-    //     path: `${__dirname}/src/images`,
-    //   },
-    // },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: path.join(__dirname, 'src', 'images'),
+      },
+    },
     'gatsby-transformer-json',
     {
       resolve: 'gatsby-source-filesystem',

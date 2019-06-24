@@ -3,13 +3,34 @@ import { Link } from 'gatsby';
 import styled from '@emotion/styled';
 import Layout from '../components/layout/';
 import SEO from '../components/seo';
+import BackgroundImg from '../components/backgroundImg.js';
 
+const colors = {
+  nflBlue: '#013369',
+  nflRed: '#d50a0a',
+};
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
   text-align: center;
-  margin-top: 100px;
+`;
+
+const Title = styled.h1`
+  color: #fff;
+  font-family: 'Gill Sans', sans-serif;
+  margin-bottom: 40px;
+  font-size: 3em;
+  text-shadow: 0 10px 5px rgba(0, 0, 0, 1);
+`;
+
+const MainTitle = styled.h1`
+  color: #d50a0a;
+  font-size: 4em;
+  text-shadow: 0 10px 5px rgba(0, 0, 0, 1);
+  margin: 10px 0;
 `;
 
 const LinksContainer = styled.div`
@@ -17,7 +38,7 @@ const LinksContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-
+  margin: 10px 0;
   @media (max-width: 600px) {
     flex-direction: column;
   }
@@ -26,36 +47,49 @@ const LinksContainer = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: white;
+  cursor: ${p => (p.disabled ? `not-allowed` : `pointer`)};
+  pointer-events: ${p => (p.disabled ? `none` : `auto`)};
 `;
 
 const Button = styled.button`
-  background: ${p => p.theme.color.primary};
+  background: ${p => colors[p.color]};
   padding: 5px;
   border-radius: 10px;
   width: 160px;
   font-size: 0.8rem;
   align-self: center;
   margin: 0.5em;
+
+  &:disabled {
+    background-color: ${colors.nflRed};
+    cursor: not-allowed;
+  }
 `;
 const IndexPage = () => (
-  <Layout>
+  <BackgroundImg>
+    <Title>Mock Draft</Title>
+
     <Container>
-      <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
-      <h1>Mock Draft App</h1>
-      <h3>This will be initial startup page</h3>
+      <SEO title="Home" keywords={[`Mock Draft`, `NFL`, `Fantasy Football`]} />
+
+      <MainTitle>NFL</MainTitle>
+
       <LinksContainer>
-        <Button>
-          <StyledLink to="/nfl/draftroom">My NFL Draftroom</StyledLink>
+        <Button color="nflBlue">
+          <StyledLink to="/nfl/draftroom">NFL Draftroom</StyledLink>
         </Button>
-        <Button>
-          <StyledLink to="/fantasy/draftroom">My Fantasy Draftroom</StyledLink>
+        <Button disabled gradient>
+          <StyledLink disabled to="/fantasy/draftroom">
+            Fantasy Draftroom
+          </StyledLink>
         </Button>
-        <Button>
-          <StyledLink to="/setup">Setup a New Draft</StyledLink>
+        <Button color="nflBlue">
+          <StyledLink to="/setup">New Draftroom</StyledLink>
         </Button>
       </LinksContainer>
+      <MainTitle>Fantasy Football</MainTitle>
     </Container>
-  </Layout>
+  </BackgroundImg>
 );
 
 export default IndexPage;

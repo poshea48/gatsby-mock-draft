@@ -14,11 +14,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  color: white;
 `;
 
 const Title = styled.h1`
   text-align: center;
   font-family: monospace;
+  color: white;
 `;
 
 const Form = styled.form`
@@ -101,19 +103,7 @@ class SetupPage extends React.Component {
       selection: null,
     },
   };
-
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
-
-  handleNflTeamClick = e => {
-    const team = e.target.value;
-    this.setState({
-      nfl: {
-        ...this.state.nfl,
-        team: team,
-      },
-    });
-  };
-
+  // changes state when NFL settings are clicked
   handleNflSelectClick = e => {
     this.setState({
       nfl: {
@@ -126,7 +116,6 @@ class SetupPage extends React.Component {
   typeClick = e => {
     const checked = e.target.value;
     const unChecked = checked === 'nfl' ? 'fantasy' : 'nfl';
-    console.log(e.target.name);
     this.setState({
       [e.target.name]: checked,
       [checked]: {
@@ -145,7 +134,6 @@ class SetupPage extends React.Component {
     let setupInfo;
     if (this.state.draftType === 'nfl') {
       setupInfo = { type: 'nfl', ...this.state.nfl };
-      console.log(this.state);
       const result = await this.props.setupNflDraftroom(setupInfo);
       navigate('/nfl/draftroom');
       return null;
@@ -157,9 +145,9 @@ class SetupPage extends React.Component {
 
   render() {
     const { draftType, nfl, fantasy } = this.state;
-    console.log(this.state);
+
     return (
-      <Layout>
+      <Layout background="default">
         <SEO title="Setup Draft Page" />
         <Title>Create a Mock Draft</Title>
         <Container>
@@ -175,7 +163,6 @@ class SetupPage extends React.Component {
               <Header>NFL Draft Settings</Header>
               <NFLSetup
                 nfl={nfl}
-                handleTeamClick={this.handleNflTeamClick}
                 handleSelectClick={this.handleNflSelectClick}
               />
             </FormGroup>
@@ -199,17 +186,17 @@ class SetupPage extends React.Component {
   }
 }
 
-// SetupPage.propTypes = {
-//   setupNflDraftroom: PropTypes.func.isRequired,
-//   setupFantasyDraftroom: PropTypes.func.isRequired,
-//   nfl: PropTypes.object.isRequired,
-//   fantasy: PropTypes.object.isRequired,
-// };
+SetupPage.propTypes = {
+  setupNflDraftroom: PropTypes.func.isRequired,
+  // setupFantasyDraftroom: PropTypes.func.isRequired,
+  nfl: PropTypes.object.isRequired,
+  // fantasy: PropTypes.object.isRequired,
+};
 
 const mapStateToProps = state => {
   return {
     nfl: state.nfl,
-    fantasy: state.fantasy,
+    // fantasy: state.fantasy,
   };
 };
 
@@ -217,12 +204,3 @@ export default connect(
   mapStateToProps,
   { setupNflDraftroom, setupFantasyDraftroom },
 )(SetupPage);
-
-// export default connect(
-//   state => ({ nfl: state.nfl, fantasy: state.fantasy }),
-//   dispatch => ({
-//     setupNflDraftroom: setupInfo => dispatch(setupNflDraftroom(setupInfo)),
-//     setupFantasyDraftroom: setupInfo =>
-//       dispatch(setupFantasyDraftroom(setupInfo)),
-//   }),
-// )(SetupPage);

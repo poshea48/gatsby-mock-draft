@@ -9,6 +9,7 @@ import { toggleDrawer as toggleDrawerAction } from '../../state/actions/appActio
 import Header from './header';
 import Drawer from './drawer';
 import Footer from './footer';
+
 import './layout.css';
 
 const Container = styled.main`
@@ -17,6 +18,14 @@ const Container = styled.main`
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  background: linear-gradient(
+    to left,
+    ${p => (p.background ? p.theme.background[p.background].primary : `#fff`)}
+      0%,
+    ${p =>
+        p.background ? p.theme.background[p.background].secondary1 : `#fff`}
+      100%
+  );
 `;
 
 const Content = styled.section`
@@ -45,23 +54,23 @@ const Overlay = styled.div`
   pointer-events: ${p => (p.isDrawerOpen ? 'all' : 'none')};
 `;
 
-const Layout = ({ children, isDrawerOpen, toggleDrawer }) => (
-  <StaticQuery
-    query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
-            author
-            createdAt
+const Layout = ({ children, isDrawerOpen, toggleDrawer, background }) => {
+  return (
+    <StaticQuery
+      query={graphql`
+        query SiteTitleQuery {
+          site {
+            siteMetadata {
+              title
+              author
+              createdAt
+            }
           }
         }
-      }
-    `}
-    render={data => (
-      <React.StrictMode>
+      `}
+      render={data => (
         <ThemeProvider theme={theme}>
-          <Container>
+          <Container background={background}>
             <Header siteTitle={data.site.siteMetadata.title} />
 
             <Content isDrawerOpen={isDrawerOpen}>{children}</Content>
@@ -77,10 +86,10 @@ const Layout = ({ children, isDrawerOpen, toggleDrawer }) => (
           />
           <Drawer />
         </ThemeProvider>
-      </React.StrictMode>
-    )}
-  />
-);
+      )}
+    />
+  );
+};
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,

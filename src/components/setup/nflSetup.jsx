@@ -58,7 +58,7 @@ const NFLSetup = ({ nfl, handleTeamClick, handleSelectClick }) => (
               type="radio"
               name="team"
               value={NFLTEAMS[team].code}
-              onChange={handleTeamClick}
+              onChange={handleSelectClick}
             />
             <label style={{ marginLeft: '.5em' }}>
               {NFLTEAMS[team].fullName}

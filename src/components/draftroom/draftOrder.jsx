@@ -8,10 +8,10 @@ const Container = styled.div`
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 2;
-  ${'' /* @media (max-width: 860px) {
-    display: flex;
-    flex-direction: row;
-  } */}
+  /* background-color: ${p =>
+    p.team
+      ? p.theme.background[p.team].secondary2
+      : p.theme.background.default}; */
 `;
 
 const Scroll = styled.div`
@@ -36,8 +36,13 @@ const Team = styled.div`
   display: flex;
   width: 180px;
   flex-direction: column;
-  color: ${p => (p.myTeam ? 'red' : 'black')};
-  background: ${p => (p.myTeam ? 'yellow' : 'white')};
+  color: ${p =>
+    p.myTeam
+      ? p.color
+        ? p.theme.background[p.color].secondary2
+        : `white`
+      : `white`};
+
   font-weight: ${p => (p.myTeam ? 600 : 'normal')};
   padding-bottom: 1.5em;
   margin-left: 0.8em;
@@ -86,12 +91,19 @@ class DraftOrder extends React.Component {
     const li = document.getElementById(`${player.pick}`);
   };
 
-  addDetails = pickNumber => {
+  addDetails = (pickNumber, teamColor) => {
     const { draftedPlayers, currentPick } = this.props;
+
     let player;
     if (currentPick === pickNumber) {
       return (
-        <p style={{ fontWeight: '600', color: 'red', margin: 0 }}>
+        <p
+          style={{
+            fontWeight: '600',
+            color: p => p.theme.background[teamColor].secondary2,
+            margin: 0,
+          }}
+        >
           !! Current Pick !!
         </p>
       );
@@ -139,11 +151,12 @@ class DraftOrder extends React.Component {
       currentRound,
       myTeam,
       draftOrder,
+      theme,
     } = this.props;
     draftedPlayers &&
       draftedPlayers.sort((team1, team2) => team1.pick - team2.pick);
     return (
-      <Container>
+      <Container team={myTeam}>
         <h3 style={{ textAlign: 'center' }}>Round: {currentRound}</h3>
         <Scroll size="reg" id="scroll">
           {draftOrder.map((team, i) => {
@@ -153,13 +166,14 @@ class DraftOrder extends React.Component {
                 myTeam={team === myTeam}
                 id={i + 1}
                 data-team={team}
+                color={team}
               >
                 <div style={{ width: '180px' }}>
                   {i + 1}.{' '}
                   {team === myTeam ? 'Your Pick' : NFLTEAMS[team].shortName}
                 </div>
                 <div style={{ marginLeft: '0.5em' }}>
-                  {this.addDetails(i + 1)}
+                  {this.addDetails(i + 1, team)}
                 </div>
               </Team>
             );

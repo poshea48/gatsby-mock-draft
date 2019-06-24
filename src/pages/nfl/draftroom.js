@@ -12,6 +12,7 @@ import { togglePlayersModal } from '../../state/actions/appActions';
 import { setupNflDraftroom } from '../../state/actions/nflActions';
 
 const Container = styled.div`
+  color: white;
   display: grid;
   grid-gap: 1em 1em;
   grid-template-columns: 20% auto auto;
@@ -28,9 +29,6 @@ const Container = styled.div`
       'teams'
       'main';
   }
-  ${'' /* @media (max-width: 680px) {
-    grid-template-areas: 'header header header';
-  } */}
 `;
 
 const Top = styled.div`
@@ -182,8 +180,8 @@ class NFLDraftroom extends React.Component {
       }
       return null;
     }
+
     if (isEmpty(this.state.needs)) {
-      console.log(nfl);
       let needs = this.props.data.teamNeedsJson.teams.filter(
         teamNeeds => teamNeeds.team === nfl.team,
       )[0].needs;
@@ -316,13 +314,14 @@ class NFLDraftroom extends React.Component {
       draftedPlayers,
       draftOrder,
     } = this.state;
+
     return (
-      <Layout>
+      <Layout background={nfl.team}>
         <Overlay
           onClick={() => this.props.togglePlayersModal(false)}
           isPlayersModalOpen={this.props.app.isPlayersModalOpen}
         />
-        <Container color="blueSteal">
+        <Container>
           <Top>
             <h3 style={{ textAlign: 'center' }}>
               {(nfl.team && nflTeams[nfl.team].fullName) || `...Loading`} Draft
