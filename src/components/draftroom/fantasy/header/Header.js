@@ -123,13 +123,7 @@ const Header = props => {
     draftStarted,
     draftComplete,
   } = props.fantasy;
-  const {
-    incrementDraft,
-    startDraft,
-    pauseDraft,
-    draftPlayer,
-    endDraft,
-  } = props;
+  const { startDraft, pauseDraft, draftPlayer, endDraft } = props;
   const simulateRef = useRef(null);
 
   const getDirection = () => {
@@ -241,6 +235,7 @@ const Header = props => {
         </TitleWrapper>
         <OnTheClock
           team={
+            teams &&
             teams[getTeamIndex(currentPick, currentRound, settings.numOfTeams)]
               .id
           }
