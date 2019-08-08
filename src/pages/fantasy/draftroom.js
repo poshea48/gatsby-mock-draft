@@ -42,13 +42,11 @@ const TeamPlayers = styled.div`
 `;
 
 const FantasyDraftroom = ({ fantasy, data, getAllPlayers }) => {
-  if (!fantasy.teamName) {
-    navigate('/setup');
-    return null;
-  }
-
   useEffect(() => {
-    console.log('draftroom useEffect');
+    if (!fantasy.teamName) {
+      navigate('/setup');
+      return null;
+    }
     getAllPlayers(data.allContentfulFantasy.edges[0].node.fantasyPlayers);
   }, []);
 

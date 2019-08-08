@@ -154,8 +154,6 @@ const Memo = styled.h2`
 
 class NFLDraftroom extends React.Component {
   constructor(props) {
-    navigate('/setup');
-
     super(props);
     this.state = {
       currentPick: 1,
