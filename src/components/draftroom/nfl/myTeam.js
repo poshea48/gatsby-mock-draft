@@ -1,7 +1,8 @@
 import React from 'react';
-import Scroll from '../common/scroll';
+import Scroll from '../../common/scroll';
 import styled from '@emotion/styled';
-import isEmpty from '../../validation/is-empty';
+// import isEmpty from '../../../../validation/is-empty';
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;

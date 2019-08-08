@@ -3,18 +3,21 @@ import PropTypes from 'prop-types';
 import { Link, navigate } from 'gatsby';
 import styled from '@emotion/styled';
 import Layout from '../components/layout/';
-import SEO from '../components/seo';
+import SEO from '../components/common/seo';
 import DraftTypeSetup from '../components/setup/draftTypeSetup';
 import NFLSetup from '../components/setup/nflSetup';
 import { connect } from 'react-redux';
 import { setupNflDraftroom } from '../state/actions/nflActions';
 import { setupFantasyDraftroom } from '../state/actions/fantasyActions';
+import FantasySetup from '../components/setup/fantasySetup';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   color: white;
+  align-items: center;
+  flex: 1 auto;
 `;
 
 const Title = styled.h1`
@@ -24,11 +27,15 @@ const Title = styled.h1`
 `;
 
 const Form = styled.form`
-  display: block;
+  flex: 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   position: relative;
   font-size: 1rem;
-  margin: 0 auto;
   max-width: 800px;
+  width: 100%;
+  margin-bottom: 0;
 `;
 
 const FormGroup = styled.div`
@@ -38,50 +45,33 @@ const FormGroup = styled.div`
   align-items: stretch;
   overflow: visible;
   padding: 1em 1em;
-  margin: 1rem 0;
+  margin: 0 0 0.5em 0;
   border-radius: 0.28571429rem;
   border: 1px solid rgba(34, 36, 38, 0.15);
-  background: #fgfafb;
+  background: '#fgfafb';
   border-color: rgba(34, 36, 38, 0.15);
   box-shadow: 0 2px 25px 0 rgba(34, 36, 38, 0.05) inset;
+  &:first-of-type {
+    margin-bottom: 1em;
+  }
 `;
 
-const Button = styled.button`
-  background-color: ${p => p.theme.color.primary};
-  color: white;
-  box-shadow: 0 0 0 0 rgba(34, 36, 38, 0.15) inset;
-  width: 100%;
-  display: block;
-  font-size: 1rem;
+const TypeGroup = styled(FormGroup)`
+  /* flex-basis: 40%; */
+`;
 
-  cursor: pointer;
-  min-height: 1em;
-  outline: 0;
-  border: none;
-  vertical-align: baseline;
-  font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  margin: 0 0.25em 0 0;
-  padding: 0.78571429em 1.5em 0.78571429em;
-  text-transform: none;
-  font-weight: 700;
-  line-height: 1em;
-  font-style: normal;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 0.28571429rem;
-
-  user-select: none;
-  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
-    box-shadow 0.1s ease, background 0.1s ease;
-
-  &:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-  }
+const SettingsGroup = styled(FormGroup)`
+  flex: 1 auto;
 `;
 
 const Header = styled.h3`
   text-align: center;
+`;
+
+const Memo = styled.h2`
+  text-align: center;
+  text-transform: uppercase;
+  color: yellow;
 `;
 
 class SetupPage extends React.Component {
@@ -95,14 +85,19 @@ class SetupPage extends React.Component {
     },
     fantasy: {
       hidden: true,
-      teamName: '',
-      type: '',
+      team: '',
       numOfTeams: '',
       numOfRounds: 15,
       positions: ['qb', 'rb', 'rb', 'wr', 'wr', 'te', 'flex', 'd', 'k'],
-      selection: null,
+      pickNumber: null,
     },
   };
+
+  componentDidMount() {
+    if (localStorage.nflSetupStore) {
+      localStorage.removeItem('nflSetupStore');
+    }
+  }
   // changes state when NFL settings are clicked
   handleNflSelectClick = e => {
     this.setState({
@@ -113,11 +108,21 @@ class SetupPage extends React.Component {
     });
   };
 
-  typeClick = e => {
-    const checked = e.target.value;
-    const unChecked = checked === 'nfl' ? 'fantasy' : 'nfl';
+  handleFantasyClick = e => {
     this.setState({
-      [e.target.name]: checked,
+      fantasy: {
+        ...this.state.fantasy,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  typeClick = type => {
+    const checked = type;
+    const unChecked = checked === 'nfl' ? 'fantasy' : 'nfl';
+
+    this.setState({
+      draftType: checked,
       [checked]: {
         ...this.state[checked],
         hidden: false,
@@ -129,56 +134,51 @@ class SetupPage extends React.Component {
     });
   };
 
-  handleSubmit = async e => {
+  handleNFLSubmit = async e => {
     e.preventDefault();
-    let setupInfo;
-    if (this.state.draftType === 'nfl') {
-      setupInfo = { type: 'nfl', ...this.state.nfl };
-      const result = await this.props.setupNflDraftroom(setupInfo);
-      navigate('/nfl/draftroom');
-      return null;
-    } else {
-      setupInfo = { type: 'fantasy', ...this.state.fantasy };
-      this.props.setupFantasyDraftroom(setupInfo);
-    }
+    debugger;
+    let setupInfo = { type: 'nfl', ...this.state.nfl };
+    const result = await this.props.setupNflDraftroom(setupInfo);
+    navigate('/nfl/draftroom');
+    return null;
+  };
+
+  handleFantasySubmit = setupInfo => {
+    setupInfo = { type: 'fantasy', ...setupInfo };
+    this.props.setupFantasyDraftroom(setupInfo);
+    navigate('/fantasy/draftroom');
+    return null;
+  };
+
+  disableButton = type => {
+    return !!this.state[type].team;
   };
 
   render() {
     const { draftType, nfl, fantasy } = this.state;
-
     return (
       <Layout background="default">
         <SEO title="Setup Draft Page" />
-        <Title>Create a Mock Draft</Title>
+        <Title>Create Draft</Title>
         <Container>
           <Form>
-            <FormGroup>
-              <Header>Choose Type</Header>
+            <TypeGroup>
               <DraftTypeSetup
                 draftType={draftType}
                 typeClick={this.typeClick}
               />
-            </FormGroup>
-            <FormGroup hidden={this.state.nfl.hidden}>
-              <Header>NFL Draft Settings</Header>
-              <NFLSetup
+            </TypeGroup>
+            <SettingsGroup hidden={this.state.nfl.hidden}>
+              <Memo>Under Construction</Memo>
+              {/* <NFLSetup
                 nfl={nfl}
                 handleSelectClick={this.handleNflSelectClick}
-              />
-            </FormGroup>
-            <FormGroup hidden={this.state.fantasy.hidden}>
-              <Header>Fantasy Draft Settings</Header>
-              <small style={{ margin: '0 auto' }}> ** Not set up yet **</small>
-            </FormGroup>
-
-            <Button
-              onClick={this.handleSubmit}
-              disabled={
-                this.state.draftType === 'fantasy' || this.state.nfl.team === ''
-              }
-            >
-              Setup Your Draft Room
-            </Button>
+                submit={this.handleNFLSubmit}
+              /> */}
+            </SettingsGroup>
+            <SettingsGroup hidden={this.state.fantasy.hidden}>
+              <FantasySetup submit={this.handleFantasySubmit} />
+            </SettingsGroup>
           </Form>
         </Container>
       </Layout>
@@ -188,15 +188,15 @@ class SetupPage extends React.Component {
 
 SetupPage.propTypes = {
   setupNflDraftroom: PropTypes.func.isRequired,
-  // setupFantasyDraftroom: PropTypes.func.isRequired,
+  setupFantasyDraftroom: PropTypes.func.isRequired,
   nfl: PropTypes.object.isRequired,
-  // fantasy: PropTypes.object.isRequired,
+  fantasy: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     nfl: state.nfl,
-    // fantasy: state.fantasy,
+    fantasy: state.fantasy,
   };
 };
 

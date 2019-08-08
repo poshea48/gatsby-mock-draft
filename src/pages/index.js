@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'gatsby';
 import styled from '@emotion/styled';
 import Layout from '../components/layout/';
-import SEO from '../components/seo';
-import BackgroundImg from '../components/backgroundImg.js';
+import SEO from '../components/common/seo';
+import BackgroundImg from '../components/common/backgroundImg.js';
 
 const colors = {
   nflBlue: '#013369',
@@ -78,10 +78,8 @@ const IndexPage = () => (
         <Button color="nflBlue">
           <StyledLink to="/nfl/draftroom">NFL Draftroom</StyledLink>
         </Button>
-        <Button disabled gradient>
-          <StyledLink disabled to="/fantasy/draftroom">
-            Fantasy Draftroom
-          </StyledLink>
+        <Button color="nflBlue">
+          <StyledLink to="/fantasy/draftroom">Fantasy Draftroom</StyledLink>
         </Button>
         <Button color="nflBlue">
           <StyledLink to="/setup">New Draftroom</StyledLink>

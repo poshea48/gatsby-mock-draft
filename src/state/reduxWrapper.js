@@ -3,7 +3,8 @@ import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers';
-
+// import '../style/reset.css';
+import 'normalize.css';
 const middleware = [thunk];
 const initialState = {};
 let store;

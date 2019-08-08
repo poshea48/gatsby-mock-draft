@@ -10,7 +10,8 @@ import Header from './header';
 import Drawer from './drawer';
 import Footer from './footer';
 
-import './layout.css';
+// import './layout.css';
+// import './reset.css';
 
 const Container = styled.main`
   width: 100vw;
@@ -18,17 +19,21 @@ const Container = styled.main`
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  background: linear-gradient(
+  background: #6495ED;
+  /* background: linear-gradient(
     to left,
     ${p => (p.background ? p.theme.background[p.background].primary : `#fff`)}
       0%,
     ${p =>
-        p.background ? p.theme.background[p.background].secondary1 : `#fff`}
+      p.background ? p.theme.background[p.background].secondary1 : `#fff`}
       100%
-  );
+  ); */
 `;
 
 const Content = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   transition: transform 0.3s ease-in-out;
   transform: perspective(200px)
     ${p =>

@@ -1,19 +1,37 @@
-import React from 'react';
-import Link from 'gatsby-link';
+import React, { useState } from 'react';
+// import Link from 'gatsby-link';
 import styled from '@emotion/styled';
 
-const Grid = styled.div`
+const Container = styled.div`
   display: flex;
-  flex-direction: ${p => (p.column ? 'column' : 'row')};
-  > div {
-    width: ${p => (p.columns ? `${100 / p.columns}%` : '100%')};
-  }
-  @media (max-width: 550px) {
-    flex-direction: column;
-    > div {
-      width: 100%;
+  flex-direction: column;
+    /* > div {
+      width: ${p => (p.columns ? `${100 / p.columns}%` : '100%')};
+    } */
+    @media (max-width: 550px) {
+      flex-direction: column;
+      
     }
-  }
+`;
+
+const Header = styled.h3`
+  text-align: center;
+`;
+
+const SelectionWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  overflow-y: scroll;
+`;
+
+const Shortened = styled.div`
+  display: ${p => (p.disabled ? `none` : `flex`)};
+  justify-content: space-between;
+`;
+
+const ShortColumn = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const GridRow = styled.div`
@@ -25,8 +43,8 @@ const GridRow = styled.div`
 `;
 
 const Column = styled.div`
-  width: 50%;
   padding: 1rem;
+  flex-basis: 50%;
 `;
 
 const ColumnHeader = styled.div`
@@ -37,19 +55,15 @@ const ColumnHeader = styled.div`
 `;
 
 const RadioButton = styled.input`
-    cursor: pointer;
-    z-index: 3;
-    width: 17px;
-    height: 17px;
-    margin: 6px 1em 0 0;
-  }
-`;
-
-const Header = styled.h3`
-  text-align: center;
+  cursor: pointer;
+  z-index: 3;
+  width: 17px;
+  height: 17px;
+  margin: 6px 1em 0 0;
 `;
 
 const List = styled.ul`
+  display: ${p => (p.selected ? 'none' : 'block')};
   height: 120px;
   list-style-type: square;
   > li {
@@ -59,52 +73,61 @@ const List = styled.ul`
     line-height: 1.14285714em;
   }
 `;
+const DraftTypeSetup = ({ draftType, typeClick }) => {
+  const [draft, changeDraft] = useState(draftType);
+  const [draftShort, changeShortDraft] = useState(draftType);
 
-const DraftTypeSetup = ({ draftType, typeClick }) => (
-  <Grid columns={2} stackable>
-    <Column>
-      <ColumnHeader>
-        <RadioButton
-          type="radio"
-          name="draftType"
-          value="nfl"
-          checked={draftType === 'nfl'}
-          onChange={typeClick}
-        />
+  const handleChange = e => {
+    console.log(e.target.value);
+    changeDraft(e.target.value);
+    typeClick(e.target.value);
+  };
 
-        <label>
-          <Header>NFL</Header>
-        </label>
-      </ColumnHeader>
+  return (
+    <Container>
+      <Header>Choose Type</Header>
+      <SelectionWrapper>
+        <Column>
+          <ColumnHeader>
+            <RadioButton
+              type="radio"
+              name="draft"
+              value="nfl"
+              checked={draft === 'nfl'}
+              onChange={handleChange}
+            />
 
-      <List>
-        <li>Choose a NFL team</li>
-        <li>Become the GM/Head Coach/Owner</li>
-        <li>Do some other stuff</li>
-      </List>
-    </Column>
+            <label>NFL</label>
+          </ColumnHeader>
 
-    <Column>
-      <ColumnHeader>
-        <RadioButton
-          type="radio"
-          name="draftType"
-          value="fantasy"
-          checked={draftType === 'fantasy'}
-          onChange={typeClick}
-        />
+          <List selected={draftType === 'nfl' || draftType === 'fantasy'}>
+            <li>Choose a NFL team</li>
+            <li>Become the GM/Head Coach/Owner</li>
+            <li>Do some other stuff</li>
+          </List>
+        </Column>
 
-        <label>
-          <Header>Fantasy</Header>
-        </label>
-      </ColumnHeader>
-      <List>
-        <li>Draft a Fantasy Team</li>
-        <li>Choose what pick number and Number of teams</li>
-        <li>etc etc etc</li>
-      </List>
-    </Column>
-  </Grid>
-);
+        <Column>
+          <ColumnHeader>
+            <RadioButton
+              type="radio"
+              name="draft"
+              value="fantasy"
+              checked={draft === 'fantasy'}
+              onChange={handleChange}
+            />
+
+            <label>Fantasy</label>
+          </ColumnHeader>
+          <List selected={draftType === 'nfl' || draftType === 'fantasy'}>
+            <li>Draft a Fantasy Team</li>
+            <li>Choose what pick number and Number of teams</li>
+            <li>etc etc etc</li>
+          </List>
+        </Column>
+      </SelectionWrapper>
+    </Container>
+  );
+};
 
 export default DraftTypeSetup;

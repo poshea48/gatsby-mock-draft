@@ -2,12 +2,12 @@ import React from 'react';
 import { graphql, navigate } from 'gatsby';
 import { connect } from 'react-redux';
 import styled from '@emotion/styled';
-import Layout from '../../components/layout/';
-import DraftOrder from '../../components/draftroom/draftOrder';
-import AvailablePlayers from '../../components/draftroom/availablePlayers';
+import Layout from '../../components/layout';
+import DraftOrder from '../../components/draftroom/nfl/draftOrder';
+import AvailablePlayers from '../../components/draftroom/nfl/availablePlayers';
 import isEmpty from '../../validation/is-empty';
 import nflTeams from '../../constants/nflTeams';
-import MyTeam from '../../components/draftroom/myTeam';
+import MyTeam from '../../components/draftroom/nfl/myTeam';
 import { togglePlayersModal } from '../../state/actions/appActions';
 import { setupNflDraftroom } from '../../state/actions/nflActions';
 
@@ -53,12 +53,9 @@ const Players = styled.div`
 
     background: white;
     transition: transform 0.3s ease-in-out;
-    opacity: ${p => (p.isPlayersModalOpen ? 1 : 0)}
-    ${
-      '' /* transform: translateX(
-      ${p => (p.isPlayerModalOpen ? 20 : `-${p.theme.size(16)}`)} */
-    }
-    );
+    opacity: ${p => (p.isPlayersModalOpen ? 1 : 0)};
+    ${'' /* transform: translateX(
+      ${p => (p.isPlayerModalOpen ? 20 : `-${p.theme.size(16)}`)} */}
   }
 `;
 
@@ -149,8 +146,16 @@ const DraftButton = styled.button`
 
 const Header = styled.h3``;
 
+const Memo = styled.h2`
+  text-align: center;
+  text-transform: uppercase;
+  color: yellow;
+`;
+
 class NFLDraftroom extends React.Component {
   constructor(props) {
+    navigate('/setup');
+
     super(props);
     this.state = {
       currentPick: 1,
@@ -170,16 +175,17 @@ class NFLDraftroom extends React.Component {
   }
 
   componentDidMount() {
+    return;
     const { nfl } = this.props;
-    if (isEmpty(nfl.team)) {
-      let localData = JSON.parse(localStorage.getItem('nflSetupStore'));
-      if (localData) {
-        this.props.setupNflDraftroom(localData);
-      } else {
-        navigate('/setup');
-      }
-      return null;
-    }
+    // if (isEmpty(nfl.team)) {
+    //   let localData = JSON.parse(localStorage.getItem('nflSetupStore'));
+    //   if (localData) {
+    //     this.props.setupNflDraftroom(localData);
+    //   } else {
+    //     navigate('/setup');
+    //   }
+    //   return null;
+    // }
 
     if (isEmpty(this.state.needs)) {
       let needs = this.props.data.teamNeedsJson.teams.filter(
@@ -321,7 +327,8 @@ class NFLDraftroom extends React.Component {
           onClick={() => this.props.togglePlayersModal(false)}
           isPlayersModalOpen={this.props.app.isPlayersModalOpen}
         />
-        <Container>
+        <Memo>under construction</Memo>
+        {/* <Container>  UPDATE, REDO WITHOUT GRID
           <Top>
             <h3 style={{ textAlign: 'center' }}>
               {(nfl.team && nflTeams[nfl.team].fullName) || `...Loading`} Draft
@@ -415,7 +422,7 @@ class NFLDraftroom extends React.Component {
               round={this.state.currentRound}
             />
           </Players>
-        </Container>
+        </Container> */}
       </Layout>
     );
   }
@@ -470,13 +477,6 @@ const mapStateToProps = state => {
     nfl: state.nfl,
   };
 };
-
-// export default connect(
-//   mapStateToProps,
-//   dispatch => ({
-//     togglePlayersModal: open => dispatch(togglePlayersModal(open)),
-//   }),
-// )(NFLDraftroom);
 
 export default connect(
   mapStateToProps,

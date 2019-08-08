@@ -15,7 +15,6 @@ const Navbar = styled.header`
   height: ${p => p.theme.size(4)};
   width: 100vw;
   height: 50px;
-  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

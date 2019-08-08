@@ -2,7 +2,7 @@ import React from 'react';
 import { StaticQuery, graphql } from 'gatsby';
 // import Scroll from '../common/scroll';
 import styled from '@emotion/styled';
-import NFLTEAMS from '../../constants/nflTeams';
+import NFLTEAMS from '../../../constants/nflTeams';
 
 const Container = styled.div`
   grid-column-start: 1;
@@ -17,14 +17,16 @@ const Container = styled.div`
 const Scroll = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 440px;
+  height: calc(100vh - 380px);
+  /* flex: 1 auto; */
   margin-bottom: 10px;
-  align-items: stretch;
+  /* align-items: stretch; */
   @media (max-width: 860px) {
     flex-direction: row;
-    height: 65px;
+    height: 55px;
     overflow-x: scroll;
     overflow-y: hidden;
     max-width: 100vw;
@@ -34,7 +36,8 @@ const Scroll = styled.div`
 
 const Team = styled.div`
   display: flex;
-  width: 180px;
+  flex-basis: 50%;
+  box-sizing: border-box;
   flex-direction: column;
   color: ${p =>
     p.myTeam
@@ -44,15 +47,26 @@ const Team = styled.div`
       : `white`};
 
   font-weight: ${p => (p.myTeam ? 600 : 'normal')};
-  padding-bottom: 1.5em;
-  margin-left: 0.8em;
+  padding-bottom: 1em;
+  /* margin-left: 0.8em; */
   @media (max-width: 860px) {
-    width: 200px;
-    height: 80px;
+    min-width: 120px;
+    /* height: 80px; */
 
     margin-right: 5px;
     margin-bottom: 0;
   }
+`;
+
+const TeamName = styled.p`
+  display: inline-block;
+  margin: 0;
+`;
+
+const Details = styled.p`
+  display: inline-block;
+  margin: 0;
+  color: ${p => p.theme.background[p.color].secondary2};
 `;
 
 // One day => break up into DraftOrderList and DraftOrderListItem
@@ -66,6 +80,7 @@ const Team = styled.div`
 // useEffect(() => {
 //    teamRef.current.scrollIntoView
 //})
+
 class DraftOrder extends React.Component {
   state = {
     round: 1,
@@ -96,17 +111,7 @@ class DraftOrder extends React.Component {
 
     let player;
     if (currentPick === pickNumber) {
-      return (
-        <p
-          style={{
-            fontWeight: '600',
-            color: p => p.theme.background[teamColor].secondary2,
-            margin: 0,
-          }}
-        >
-          !! Current Pick !!
-        </p>
-      );
+      return <Details color={teamColor}>!! Current Pick !!</Details>;
     } else if (
       (player = draftedPlayers.filter(p => p.pick === pickNumber)[0])
     ) {
@@ -116,7 +121,7 @@ class DraftOrder extends React.Component {
         </p>
       );
     } else {
-      return '';
+      return <p> </p>;
     }
   };
 
@@ -168,10 +173,10 @@ class DraftOrder extends React.Component {
                 data-team={team}
                 color={team}
               >
-                <div style={{ width: '180px' }}>
+                <TeamName>
                   {i + 1}.{' '}
                   {team === myTeam ? 'Your Pick' : NFLTEAMS[team].shortName}
-                </div>
+                </TeamName>
                 <div style={{ marginLeft: '0.5em' }}>
                   {this.addDetails(i + 1, team)}
                 </div>

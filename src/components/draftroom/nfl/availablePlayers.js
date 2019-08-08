@@ -2,8 +2,8 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 const Table = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr
+  /* display: grid; */
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   grid-auto-rows: auto;
   overflow-x: scroll;
   max-height: 50vh;
@@ -21,6 +21,7 @@ const RowItem = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   margin-bottom: 10px;
+
   @media (max-width: 500px) {
     font-size: 85%;
   }

@@ -34,7 +34,7 @@ const MenuIcon = styled.a`
 `;
 
 const Navbar = styled.header`
-  height: ${p => p.theme.size(4)};
+  height: 50px;
   width: 100%;
   display: flex;
   align-items: center;
