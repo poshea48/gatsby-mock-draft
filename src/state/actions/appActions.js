@@ -7,7 +7,6 @@ export const toggleDrawer = open => ({ type: TOGGLE_DRAWER, payload: open });
 // });
 
 export const togglePlayersModal = open => dispatch => {
-  console.log('landed here');
   dispatch({
     type: TOGGLE_PLAYERS_MODAL,
     payload: open,

@@ -74,7 +74,6 @@ const Players = ({ players, draftPlayer }) => {
     e.preventDefault();
     draftPlayer(e.currentTarget.dataset.player_id);
   };
-  console.log('Players rendered');
   const availablePlayers = players
     ? players.map((player, i) => (
         <PlayerRow

@@ -92,13 +92,6 @@ class DraftOrder extends React.Component {
     let target = document.getElementById(pick);
     // container.scrollTop = target;
     target.scrollIntoView(true);
-
-    // if (container.scrollTop === 0) {
-    //   container.scrollLeft += 185;
-    // } else {
-    //   console.log('Paul here');
-    //   target.scrollIntoView(true);
-    // }
   };
 
   showPlayerDrafted = player => {
@@ -126,16 +119,13 @@ class DraftOrder extends React.Component {
   };
 
   componentDidMount() {
-    console.log('mounting');
     if (this.props.currentPick !== 1) {
       this.scrollToCurrentPick(this.props.currentPick);
     }
   }
 
   componentDidUpdate(prevProps) {
-    console.log('updating');
     if (prevProps.currentPick !== this.props.currentPick) {
-      console.log('updating with prevprops.currentPick diff');
       this.scrollToCurrentPick(this.props.currentPick);
     }
 

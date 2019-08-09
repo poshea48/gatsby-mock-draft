@@ -45,7 +45,7 @@ const FantasyDraftroom = ({ fantasy, data, getAllPlayers }) => {
   useEffect(() => {
     if (!fantasy.teamName) {
       navigate('/setup');
-      return null;
+      return;
     }
     getAllPlayers(data.allContentfulFantasy.edges[0].node.fantasyPlayers);
   }, []);

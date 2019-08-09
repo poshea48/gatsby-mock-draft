@@ -31,7 +31,7 @@ const Team = styled.div`
   }
 `;
 
-const OnTheClock = ({ team, round, pick, totalRounds }) => {
+const OnTheClock = ({ teamId, round, pick, totalRounds }) => {
   return (
     <Container>
       <Timer />
@@ -42,7 +42,7 @@ const OnTheClock = ({ team, round, pick, totalRounds }) => {
         <h6>Pick: {pick}</h6>
       </Current>
       <Team>
-        <p>On the Clock: {team}</p>
+        <p>On the Clock: {teamId}</p>
       </Team>
     </Container>
   );

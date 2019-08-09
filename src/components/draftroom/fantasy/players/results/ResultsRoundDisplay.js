@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import styled from '@emotion/styled';
@@ -70,10 +70,12 @@ const ResultsRoundDisplay = ({ results }) => {
 
   const scrollToBottom = () => {
     if (!resultsEndRef.current) return;
-    resultsEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    resultsEndRef.current.scrollTo(0, resultsEndRef.current.scrollHeight);
+    // resultsEndRef.current.scrollIntoView({ block: 'end', behavior: 'smooth' });
   };
 
-  useEffect(scrollToBottom, [results]);
+  useLayoutEffect(scrollToBottom, [results]);
+
   const displayResults =
     results.length === 0
       ? []
@@ -84,7 +86,7 @@ const ResultsRoundDisplay = ({ results }) => {
                 <span>Round {i + 1}</span>
               </RoundTitle>
 
-              <RoundResults ref={resultsEndRef}>
+              <RoundResults>
                 {picks.map((pick, j) => {
                   return (
                     <Pick key={`pick-${j}`} you={pick.teamId === 'You'}>
@@ -109,7 +111,7 @@ const ResultsRoundDisplay = ({ results }) => {
         <TeamField>Team</TeamField>
         <NameField>Player</NameField>
       </PickHeader>
-      <ResultsWrapper>{displayResults}</ResultsWrapper>
+      <ResultsWrapper ref={resultsEndRef}>{displayResults}</ResultsWrapper>
     </Container>
   );
 };

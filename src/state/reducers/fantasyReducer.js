@@ -48,7 +48,6 @@ export default (state = initialState, action) => {
           return false;
         } else return true;
       });
-
       const teams = [...state.teams];
       const team = teams[payload.teamIndex];
       const starters = team.starters;

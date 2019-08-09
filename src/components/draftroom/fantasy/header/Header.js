@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import getTeamIndex from '../../../../utils/getTeamIndex';
 import OnTheClock from './onTheClock/OnTheClock';
@@ -124,7 +124,48 @@ const Header = props => {
     draftComplete,
   } = props.fantasy;
   const { startDraft, pauseDraft, draftPlayer, endDraft } = props;
+
+  const [currentTeam, changeTeam] = useState(teams[0]);
+
   const simulateRef = useRef(null);
+
+  // change current team when currentPick increments
+  useEffect(() => {
+    if (teams.length === 0) return;
+  }, []);
+
+  useEffect(() => {
+    changeTeam(
+      teams[getTeamIndex(currentPick, currentRound, settings.numOfTeams)],
+    );
+  }, [currentPick]);
+
+  useEffect(() => {
+    if (draftStarted) {
+      simulate();
+    }
+  }, [currentRound]);
+
+  // update simulate and scroll after currentTeam updates
+  useEffect(() => {
+    if (teams.length === 0) return;
+
+    if (currentTeam.autoPick && draftStarted) {
+      simulate();
+    }
+  }, [currentTeam]);
+
+  useLayoutEffect(() => {
+    let scroll = document.getElementById('scroll');
+    scroll.scrollLeft =
+      60 * getTeamIndex(currentPick, currentRound, settings.numOfTeams);
+  }, [currentTeam]);
+
+  useEffect(() => {
+    if (draftStarted) {
+      simulate();
+    }
+  }, [draftStarted]);
 
   const getDirection = () => {
     if (currentRound % 2 === 0) return 'left';
@@ -174,20 +215,15 @@ const Header = props => {
       endDraft();
       return;
     }
-
-    if (
-      !teams[getTeamIndex(currentPick, currentRound, settings.numOfTeams)]
-        .autoPick
-    )
-      return;
-    simulateRef.current = setTimeout(async () => {
-      let teamIndex = getTeamIndex(
-        currentPick,
-        currentRound,
-        settings.numOfTeams,
-      );
-      let playerId = getSimulatedPlayer(teams[teamIndex]);
-      await draftPlayer(playerId, teamIndex);
+    // TypeError: Cannot read property 'Position' of undefined
+    if (!currentTeam.autoPick) return;
+    // let teamIndex = teams.indexOf(currentTeam);
+    // let playerId = getSimulatedPlayer(currentTeam);
+    // draftPlayer(playerId, teamIndex);
+    simulateRef.current = setTimeout(() => {
+      let teamIndex = teams.indexOf(currentTeam);
+      let playerId = getSimulatedPlayer(currentTeam);
+      draftPlayer(playerId, teamIndex);
       // incrementDraft(currentPick, currentRound, settings.numOfTeams);
     }, 500);
   };
@@ -198,28 +234,10 @@ const Header = props => {
     return;
   };
 
-  useEffect(() => {
-    if (
-      teams[getTeamIndex(currentPick, currentRound, settings.numOfTeams)]
-        .autoPick &&
-      draftStarted
-    ) {
-      console.log('useEffect before simulate');
-      simulate();
-    }
-    let scroll = document.getElementById('scroll');
-    scroll.scrollLeft =
-      60 * getTeamIndex(currentPick, currentRound, settings.numOfTeams);
-  }, [currentPick]);
-
-  useEffect(() => {
-    if (draftStarted) {
-      simulate();
-    }
-  }, [draftStarted]);
-
   const handleStartDraftClick = () => {
     if (draftStarted) {
+      clearTimeout(simulateRef.current);
+
       pauseDraft();
       return;
     }
@@ -234,11 +252,7 @@ const Header = props => {
           <MainTitle>Draft Central</MainTitle>
         </TitleWrapper>
         <OnTheClock
-          team={
-            teams &&
-            teams[getTeamIndex(currentPick, currentRound, settings.numOfTeams)]
-              .id
-          }
+          team={currentTeam}
           round={currentRound}
           pick={currentPick}
           totalRounds={settings.numOfRounds}
