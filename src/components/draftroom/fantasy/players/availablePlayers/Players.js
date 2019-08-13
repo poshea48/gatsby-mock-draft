@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 
 const PlayersTable = styled.div`
@@ -18,6 +18,7 @@ const Row = styled.div`
 `;
 
 const PlayerRow = styled(Row)`
+  position: relative;
   padding: 0.5em 0;
   min-height: 35px;
   cursor: pointer;
@@ -69,17 +70,22 @@ const RankField = styled(Field)`
   text-align: center;
 `;
 
-const Players = ({ players, draftPlayer }) => {
-  const handleClick = e => {
+const Players = ({ players, selectPlayer }) => {
+  const handleSelect = e => {
     e.preventDefault();
-    draftPlayer(e.currentTarget.dataset.player_id);
+    const player = {
+      id: e.currentTarget.dataset.playerId,
+      name: e.currentTarget.dataset.playerName,
+    };
+    selectPlayer(e.clientX, e.clientY, player);
   };
   const availablePlayers = players
     ? players.map((player, i) => (
         <PlayerRow
           key={player.id}
-          onClick={handleClick}
-          data-player_id={player.id}
+          onClick={handleSelect}
+          data-player-name={player.Player}
+          data-player-id={player.id}
         >
           <RankField>{i + 1}</RankField>
           <PlayerField>{player.Player}</PlayerField>
@@ -90,6 +96,7 @@ const Players = ({ players, draftPlayer }) => {
         </PlayerRow>
       ))
     : [];
+
   return (
     <PlayersTable>
       <TableHeader>

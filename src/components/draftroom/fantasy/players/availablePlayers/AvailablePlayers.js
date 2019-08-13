@@ -7,6 +7,8 @@ import Players from './Players';
 import getTeamIndex from '../../../../../utils/getTeamIndex';
 import { connect } from 'react-redux';
 import { draftPlayer } from '../../../../../state/actions/fantasyActions';
+import useModal from '../../../../customHooks/useModal';
+import Modal from '../../../../common/Modal';
 
 const Container = styled.div`
   display: flex;
@@ -34,7 +36,48 @@ const Header = styled.div`
   margin: 0.5em 0;
 `;
 
-const Content = styled.div``;
+const Content = styled.div`
+  position: relative;
+`;
+
+const PlayerWindow = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100px;
+`;
+
+const PlayerTitleWrapper = styled.div`
+  height: 50%;
+  margin: 0;
+`;
+
+const PlayerTitle = styled.h4`
+  margin: 0;
+  text-align: center;
+  span {
+    text-transform: uppercase;
+  }
+`;
+
+const DraftButtonWrapper = styled.div`
+  height: 50%;
+  margin: 0;
+`;
+
+const DraftButton = styled.button`
+  text-align: center;
+  padding: 10px 1em;
+  width: 100px;
+  border-radius: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: #6495ed;
+    color: #fff;
+  }
+`;
+
 const availablePlayersOptions = [
   'all',
   'qb',
@@ -54,19 +97,45 @@ const AvailablePlayers = ({ fantasy, draftPlayer }) => {
     currentRound,
     draftStarted,
     draftComplete,
+    teams,
   } = fantasy;
 
   const [position, changePosition] = useState('all');
+  const [currentTeamIndex, changeTeamIndex] = useState(0);
+  const [open, setOpen] = useModal(false);
+  const [player, setPlayer] = useState({ id: '', name: '' });
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+
+  useEffect(() => {
+    changeTeamIndex(getTeamIndex(currentPick, currentRound, numOfTeams));
+  }, [currentPick]);
 
   const handlePositionSelect = e => {
     changePosition(e.target.value);
   };
 
-  const handlePlayerSelect = playerId => {
-    if (!draftStarted || draftComplete) return;
+  const handlePlayerSelect = (x, y, player) => {
+    const team = teams[currentTeamIndex];
+    if (team.autoPick || !draftStarted || draftComplete) return;
     if (currentPick > numOfTeams * numOfRounds) return;
-    const teamIndex = getTeamIndex(currentPick, currentRound, numOfTeams);
-    draftPlayer(playerId, teamIndex);
+    setPlayer(player);
+    setX(x);
+    setY(y);
+    setOpen();
+  };
+
+  const reset = () => {
+    setOpen(false);
+    setPlayer({ id: '', name: '' });
+    setX(0);
+    setY(0);
+  };
+
+  const handleDraftClick = e => {
+    e.preventDefault();
+    draftPlayer(player.id, currentTeamIndex);
+    reset();
   };
 
   const sortPlayers = (pos, players) => {
@@ -97,9 +166,23 @@ const AvailablePlayers = ({ fantasy, draftPlayer }) => {
       </Header>
       <Content>
         <Players
-          draftPlayer={handlePlayerSelect}
+          selectPlayer={handlePlayerSelect}
           players={sortPlayers(position, availablePlayers)}
         />
+        {open && (
+          <Modal open={open} toggle={setOpen} x={x} y={y}>
+            <PlayerWindow>
+              <PlayerTitleWrapper>
+                <PlayerTitle>
+                  Draft <span>{player.name}</span>
+                </PlayerTitle>
+              </PlayerTitleWrapper>
+              <DraftButtonWrapper>
+                <DraftButton onClick={handleDraftClick}>Draft</DraftButton>
+              </DraftButtonWrapper>
+            </PlayerWindow>
+          </Modal>
+        )}
       </Content>
     </Container>
   );

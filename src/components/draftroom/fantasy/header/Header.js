@@ -125,15 +125,21 @@ const Header = props => {
   } = props.fantasy;
   const { startDraft, pauseDraft, draftPlayer, endDraft } = props;
 
-  const [currentTeam, changeTeam] = useState(teams[0]);
+  const [currentTeam, changeTeam] = useState(null);
 
   const simulateRef = useRef(null);
 
-  // change current team when currentPick increments
   useEffect(() => {
+    if (!currentTeam) {
+      changeTeam(
+        teams[getTeamIndex(currentPick, currentRound, settings.numOfTeams)],
+      );
+    }
+
     if (teams.length === 0) return;
   }, []);
 
+  // * change current team when currentPick increments
   useEffect(() => {
     changeTeam(
       teams[getTeamIndex(currentPick, currentRound, settings.numOfTeams)],
@@ -141,17 +147,23 @@ const Header = props => {
   }, [currentPick]);
 
   useEffect(() => {
-    if (draftStarted) {
+    if (!currentTeam) return;
+    if (currentTeam.autoPick && draftStarted && !draftComplete) {
       simulate();
     }
   }, [currentRound]);
 
-  // update simulate and scroll after currentTeam updates
+  // * update simulate and scroll after currentTeam updates
   useEffect(() => {
+    if (!currentTeam) return;
     if (teams.length === 0) return;
-
-    if (currentTeam.autoPick && draftStarted) {
+    if (!currentTeam.autoPick) {
+      // pauseDraft();
+      return;
+    }
+    if (currentTeam.autoPick && draftStarted && !draftComplete) {
       simulate();
+      return;
     }
   }, [currentTeam]);
 
@@ -162,7 +174,7 @@ const Header = props => {
   }, [currentTeam]);
 
   useEffect(() => {
-    if (draftStarted) {
+    if (currentTeam && currentTeam.autoPick) {
       simulate();
     }
   }, [draftStarted]);
@@ -210,21 +222,18 @@ const Header = props => {
   };
 
   const simulate = () => {
-    if (draftComplete) return;
+    if (draftComplete || !draftStarted || !currentTeam) return;
+    if (!currentTeam) return;
     if (currentPick > settings.numOfTeams * settings.numOfRounds) {
       endDraft();
       return;
     }
-    // TypeError: Cannot read property 'Position' of undefined
     if (!currentTeam.autoPick) return;
-    // let teamIndex = teams.indexOf(currentTeam);
-    // let playerId = getSimulatedPlayer(currentTeam);
-    // draftPlayer(playerId, teamIndex);
+
     simulateRef.current = setTimeout(() => {
       let teamIndex = teams.indexOf(currentTeam);
       let playerId = getSimulatedPlayer(currentTeam);
       draftPlayer(playerId, teamIndex);
-      // incrementDraft(currentPick, currentRound, settings.numOfTeams);
     }, 500);
   };
 

@@ -51,6 +51,7 @@ export const setupFantasyDraftroom = ({
   teamName,
   numOfTeams,
   pickNum,
+  keeper,
   numOfRounds,
   QB,
   RB,
@@ -64,6 +65,7 @@ export const setupFantasyDraftroom = ({
     numOfTeams: Number(numOfTeams),
     numOfRounds: Number(numOfRounds),
     pickNum: Number(pickNum),
+    keeper,
   };
   let positions = {
     QB: Number(QB),

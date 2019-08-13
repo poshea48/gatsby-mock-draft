@@ -84,7 +84,7 @@ const Layout = ({ children, isDrawerOpen, toggleDrawer, background }) => {
               createdAt={data.site.siteMetadata.createdAt}
             />
           </Container>
-
+          <div id="modal-root" />
           <Overlay
             isDrawerOpen={isDrawerOpen}
             onClick={() => toggleDrawer(false)}
