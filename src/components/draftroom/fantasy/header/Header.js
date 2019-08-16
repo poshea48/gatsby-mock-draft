@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'gatsby';
 import getTeamIndex from '../../../../utils/getTeamIndex';
 import OnTheClock from './onTheClock/OnTheClock';
 import DraftOrder from './draftOrder/DraftOrder';
@@ -11,6 +12,8 @@ import {
   pauseDraft,
   endDraft,
   draftPlayer,
+  draftKeeper,
+  updateKeepers,
 } from '../../../../state/actions/fantasyActions';
 import { connect } from 'react-redux';
 
@@ -48,9 +51,19 @@ const TitleWrapper = styled.div`
   } */
 `;
 
+const TeamNameWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const TeamName = styled.h5`
   margin: 0;
   color: #2f4f4f;
+`;
+
+const SettingsLink = styled(Link)`
+  color: #fff;
+  text-decoration: none;
 `;
 
 const MainTitle = styled.h3`
@@ -122,8 +135,17 @@ const Header = props => {
     currentRound,
     draftStarted,
     draftComplete,
+    keepers,
   } = props.fantasy;
-  const { startDraft, pauseDraft, draftPlayer, endDraft } = props;
+  const {
+    startDraft,
+    pauseDraft,
+    draftPlayer,
+    draftKeeper,
+    endDraft,
+    updateKeepers,
+    incrementDraft,
+  } = props;
 
   const [currentTeam, changeTeam] = useState(null);
 
@@ -155,8 +177,14 @@ const Header = props => {
 
   // * update simulate and scroll after currentTeam updates
   useEffect(() => {
+    if (!draftStarted) return;
     if (!currentTeam) return;
     if (teams.length === 0) return;
+    if (currentTeam.skipRound && currentTeam.skipRound === currentRound) {
+      draftKeeper(currentTeam.id);
+      // incrementDraft(currentPick, currentRound, settings.numOfTeams);
+      return;
+    }
     if (!currentTeam.autoPick) {
       // pauseDraft();
       return;
@@ -174,6 +202,11 @@ const Header = props => {
   }, [currentTeam]);
 
   useEffect(() => {
+    // * handle drafting keeper with start of draft and 1st pick has a keeper
+    if (currentTeam && currentTeam.skipRound === currentPick) {
+      draftKeeper(currentTeam.id);
+      return;
+    }
     if (currentTeam && currentTeam.autoPick) {
       simulate();
     }
@@ -244,6 +277,9 @@ const Header = props => {
   };
 
   const handleStartDraftClick = () => {
+    if (keepers && !keepers.updated) {
+      updateKeepers();
+    }
     if (draftStarted) {
       clearTimeout(simulateRef.current);
 
@@ -257,7 +293,11 @@ const Header = props => {
     <Container>
       <LeftWrapper>
         <TitleWrapper>
-          <TeamName>{teamName}</TeamName>
+          <TeamNameWrapper>
+            <TeamName>{teamName}</TeamName>
+            <SettingsLink to="/fantasy/settings">Settings</SettingsLink>
+          </TeamNameWrapper>
+
           <MainTitle>Draft Central</MainTitle>
         </TitleWrapper>
         <OnTheClock
@@ -292,8 +332,11 @@ Header.propTypes = {
   incrementDraft: PropTypes.func.isRequired,
   startDraft: PropTypes.func.isRequired,
   draftPlayer: PropTypes.func.isRequired,
+  draftKeeper: PropTypes.func.isRequired,
+
   pauseDraft: PropTypes.func.isRequired,
   endDraft: PropTypes.func.isRequired,
+  updateKeepers: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -304,5 +347,13 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { incrementDraft, startDraft, draftPlayer, pauseDraft, endDraft },
+  {
+    incrementDraft,
+    startDraft,
+    draftPlayer,
+    draftKeeper,
+    pauseDraft,
+    endDraft,
+    updateKeepers,
+  },
 )(Header);

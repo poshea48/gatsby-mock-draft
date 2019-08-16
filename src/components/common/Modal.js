@@ -53,6 +53,8 @@ const CloseButton = styled.span`
 `;
 
 const ChildrenWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-basis: 100px;
 `;
 

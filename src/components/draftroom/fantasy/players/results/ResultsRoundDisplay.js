@@ -93,7 +93,7 @@ const ResultsRoundDisplay = ({ results }) => {
                       <PickField style={{ textAlign: 'center' }}>
                         {pick.pickNum}
                       </PickField>
-                      <TeamField>{pick.teamId}</TeamField>
+                      <TeamField>{pick.teamName}</TeamField>
                       <NameField>
                         {pick.player.name} ({pick.player.pos})
                       </NameField>

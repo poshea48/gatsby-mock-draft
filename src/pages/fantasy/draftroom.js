@@ -30,17 +30,6 @@ const DraftContent = styled.div`
   }
 `;
 
-const TeamPlayers = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 40%;
-  padding-left: 1em;
-
-  @media (max-width: 650px) {
-    display: none;
-  }
-`;
-
 const FantasyDraftroom = ({ fantasy, data, getAllPlayers }) => {
   useEffect(() => {
     if (!fantasy.teamName) {

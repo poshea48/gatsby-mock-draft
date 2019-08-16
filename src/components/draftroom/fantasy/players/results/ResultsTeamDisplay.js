@@ -24,10 +24,10 @@ const ResultsTeamDisplay = ({ teams }) => {
   const [teamData, changeTeamData] = useState(null);
 
   useEffect(() => {
-    changeTeamData(teams.find(team => team.id === teamName));
+    changeTeamData(teams.find(team => team.name === teamName));
   }, [teamName]);
 
-  const teamsOptions = teams.map(team => team.id);
+  const teamsOptions = teams.map(team => team.name);
 
   const handleTeamSelect = e => {
     changeTeamName(e.target.value);

@@ -221,7 +221,7 @@ const fantasySetup = ({ submit }) => {
 
   const handleChange = e => {
     const { name, value } = e.target;
-
+    if (value.match(/[<>]/)) return;
     dispatch({ type: 'ON_CHANGE', name, value });
   };
 

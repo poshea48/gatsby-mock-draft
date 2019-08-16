@@ -42,7 +42,7 @@ const OnTheClock = ({ team, round, pick, totalRounds }) => {
         <h6>Pick: {pick}</h6>
       </Current>
       <Team>
-        <p>On the Clock: {(team && team.id) || ''}</p>
+        <p>On the Clock: {(team && team.name) || ''}</p>
       </Team>
     </Container>
   );

@@ -5,8 +5,15 @@ import {
   PAUSE_DRAFT,
   GET_ALL_PLAYERS,
   DRAFT_PLAYER,
+  DRAFT_KEEPER,
   END_DRAFT,
+  UPDATE_TEAM_NAME,
+  TOGGLE_AUTOPICK,
+  UPDATE_KEEPER,
+  UPDATE_KEEPER_ROUND,
+  UPDATE_KEEPERS,
 } from '../types';
+import getPickNum from '../../utils/getPickNum';
 
 const initialState = {
   teamName: '',
@@ -22,6 +29,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
   const { type, payload } = action;
+  let updateTeams;
+  let updateTeam;
+  let starters;
   switch (type) {
     case SETUP_FANTASY_DRAFTROOM:
       return { ...state, ...payload };
@@ -48,17 +58,18 @@ export default (state = initialState, action) => {
           return false;
         } else return true;
       });
-      const teams = [...state.teams];
-      const team = teams[payload.teamIndex];
-      const starters = team.starters;
+      updateTeams = [...state.teams];
+      updateTeam = updateTeams[payload.teamIndex];
+      starters = updateTeam.starters;
       const position = drafted.Position;
       const newResults = [...state.results];
-      const pickObject = {
+      let pickObject = {
         player: {
           name: drafted.Player,
           pos: drafted.Position,
         },
-        teamId: team.id,
+        // teamId: updateTeam.id, ** change to use team.name
+        teamName: updateTeam.name,
         pickNum: state.currentPick,
       };
       newResults[state.currentRound - 1]
@@ -76,8 +87,8 @@ export default (state = initialState, action) => {
         index = starters.FLEX.indexOf('EMPTY');
         starters.FLEX[index] = drafted;
       } else {
-        index = team.bench.indexOf('EMPTY');
-        team.bench[index] = drafted;
+        index = updateTeam.bench.indexOf('EMPTY');
+        updateTeam.bench[index] = drafted;
       }
 
       if (
@@ -99,12 +110,102 @@ export default (state = initialState, action) => {
       return {
         ...state,
         availablePlayers: newPlayers,
-        teams,
+        teams: updateTeams,
         results: newResults,
         currentPick: nextPick,
         currentRound: nextRound,
         draftStarted: !finished,
         draftComplete: finished,
+      };
+    case DRAFT_KEEPER:
+      const resultsCopy = [...state.results];
+      drafted = state.keepers[payload.teamId];
+      updateTeam = state.teams.find(team => team.id === payload.teamId);
+      pickObject = {
+        player: {
+          name: drafted.playerName,
+          pos: drafted.playerPosition,
+        },
+        // teamId: updateTeam.id, ** change to use team.name
+        teamName: updateTeam.name,
+        pickNum: state.currentPick,
+      };
+      resultsCopy[state.currentRound - 1]
+        ? resultsCopy[state.currentRound - 1].push(pickObject)
+        : (resultsCopy[state.currentRound - 1] = [pickObject]);
+      nextPick = state.currentPick + 1;
+      nextRound =
+        state.currentPick % state.settings.numOfTeams === 0
+          ? state.currentRound + 1
+          : state.currentRound;
+      return {
+        ...state,
+        results: resultsCopy,
+        currentPick: nextPick,
+        currentRound: nextRound,
+      };
+    case UPDATE_TEAM_NAME:
+      const { teamId, teamName } = action.payload;
+      updateTeams = [...state.teams];
+      updateTeam = updateTeams.find(team => team.id === Number(teamId));
+      updateTeam.name = teamName;
+      return {
+        ...state,
+        teams: updateTeams,
+      };
+    case TOGGLE_AUTOPICK:
+      updateTeams = [...state.teams];
+      updateTeam = updateTeams.find(team => team.id === payload.teamId);
+      updateTeam.autoPick = !updateTeam.autoPick;
+      return {
+        ...state,
+        teams: updateTeams,
+      };
+    case UPDATE_KEEPER:
+      let keepersCopy = { ...state.keepers };
+      keepersCopy[payload.teamId] = { ...payload };
+      console.log('reducer => updateKeeper');
+      return {
+        ...state,
+        keepers: keepersCopy,
+      };
+    case UPDATE_KEEPER_ROUND:
+      keepersCopy = { ...state.keepers };
+      keepersCopy[payload.teamId].round = payload.round;
+      return {
+        ...state,
+        keepers: keepersCopy,
+      };
+    case UPDATE_KEEPERS:
+      let playerId;
+      let player;
+      let keepers = { ...state.keepers };
+      let keeper;
+      const updatedAvailablePlayers = [...state.availablePlayers];
+      const updatedTeams = [...state.teams];
+      const results = [...results];
+      let resultsObject;
+      let updatedStatus = false;
+      updatedTeams.forEach((team, i) => {
+        keeper = keepers[team.id]; // get keeper object for team
+        if (!keeper.playerId) return; // if there is no keeper return
+        if (keeper.updated) return;
+        playerId = keeper.playerId; // get playerId from keeper objec
+        player = updatedAvailablePlayers.find(p => p.id === playerId); // get player from avilablePlayers copy
+        team.starters[player.Position][0] = player; // add player into starters
+        team.skipRound = keeper.round; // add a skipRound property so simulate will skip
+        updatedAvailablePlayers.splice(
+          updatedAvailablePlayers.indexOf(player), // remove player from updatedPlayers
+          1,
+        );
+
+        keeper.updated = true;
+      });
+      return {
+        ...state,
+        teams: updatedTeams,
+        availablePlayers: updatedAvailablePlayers,
+        keepers: { ...state.keepers, updated: updatedStatus },
       };
     default:
       return state;

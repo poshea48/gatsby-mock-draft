@@ -40,6 +40,13 @@ module.exports = {
         display: `minimal-ui`,
       },
     },
+    {
+      resolve: 'gatsby-plugin-routes',
+      options: {
+        // * path to routes configuration file
+        path: `${__dirname}/src/routes.js`,
+      },
+    },
     'gatsby-plugin-emotion',
     {
       resolve: 'gatsby-source-contentful',

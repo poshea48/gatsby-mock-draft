@@ -11,8 +11,8 @@ const Order = styled.div`
 
 const DraftOrder = ({ teams }) => {
   const teamsDisplay = teams.map(team => {
-    let highlight = team.id === 'You' ? true : false;
-    return <Team key={team.id} teamName={team.id} highlight={highlight} />;
+    let highlight = team.name === 'You' ? true : false;
+    return <Team key={team.id} teamName={team.name} highlight={highlight} />;
   });
 
   return <Order>{teamsDisplay}</Order>;
