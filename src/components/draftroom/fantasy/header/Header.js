@@ -151,6 +151,7 @@ const SettingsWindow = styled.div`
   /* width: 60px; */
   align-items: self;
   z-index: 101;
+  padding: 1em 0;
 `;
 
 const SettingsList = styled.ul`
