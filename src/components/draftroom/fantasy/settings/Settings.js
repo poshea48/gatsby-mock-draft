@@ -337,6 +337,7 @@ const Settings = ({
   };
 
   // * control input inside edit team name
+  // todo add message for new team name change
   const onTeamNameChange = e => {
     e.preventDefault();
     if (e.target.value.match(/[<>]/)) return;
@@ -509,7 +510,7 @@ const Settings = ({
         <TitleWrapper>
           <BackLink to="/fantasy/draftroom">
             <BackButton />
-            <span>Back</span>
+            <span>Draftroom</span>
           </BackLink>
           <Title>Configure Draft</Title>
         </TitleWrapper>

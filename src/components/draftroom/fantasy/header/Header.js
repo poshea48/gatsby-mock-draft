@@ -6,6 +6,7 @@ import OnTheClock from './onTheClock/OnTheClock';
 import DraftOrder from './draftOrder/DraftOrder';
 import DraftPointer from './draftOrder/DraftPointer';
 import styled from '@emotion/styled';
+import useModal from '../../../customHooks/useModal';
 import {
   incrementDraft,
   startDraft,
@@ -20,7 +21,7 @@ import { connect } from 'react-redux';
 const Container = styled.div`
   display: flex;
   border-bottom: 1px solid #2f4f4f;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-basis: 25%;
   padding: 0 1em;
 
@@ -33,7 +34,7 @@ const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  width: 250px;
+  width: 30%;
   margin-right: 1em;
 
   @media (max-width: 650px) {
@@ -51,9 +52,10 @@ const TitleWrapper = styled.div`
   } */
 `;
 
-const TeamNameWrapper = styled.div`
+const MainWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 const TeamName = styled.h5`
@@ -61,16 +63,11 @@ const TeamName = styled.h5`
   color: #2f4f4f;
 `;
 
-const SettingsLink = styled(Link)`
-  color: #fff;
-  text-decoration: none;
-`;
-
 const MainTitle = styled.h3`
   color: #fff;
   font-weight: 600;
   font-size: 2em;
-  margin: 0.5em 0;
+  margin: 0.5em 0.2em 0.5em 0;
 
   @media (max-width: 790px) {
     font-size: 1.8em;
@@ -125,6 +122,59 @@ const Button = styled.button`
   }
 `;
 
+const Overlay = styled.div`
+  position: fixed;
+  display: ${p => (p.open ? `block` : 'none')};
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+`;
+
+const DotDotDot = styled.span`
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+`;
+
+const SettingsWindow = styled.div`
+  top: ${p => p.y + 'px'};
+  left: ${p => p.x + 'px'};
+  position: absolute;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* width: 60px; */
+  align-items: self;
+  z-index: 101;
+`;
+
+const SettingsList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const Setting = styled.li`
+  font-size: 12px;
+  padding: 0.5em;
+  cursor: pointer;
+  &:hover {
+    background: #2f4f4f;
+    color: #fff;
+  }
+`;
+
+const SettingsLink = styled(Link)`
+  color: red;
+  font-weight: bold;
+  text-decoration: none;
+`;
+
 const Header = props => {
   const {
     settings,
@@ -148,6 +198,9 @@ const Header = props => {
   } = props;
 
   const [currentTeam, changeTeam] = useState(null);
+  const [isModalOpen, changeModal] = useModal(false);
+  const [x, changeX] = useState(0);
+  const [y, changeY] = useState(0);
 
   const simulateRef = useRef(null);
 
@@ -211,6 +264,17 @@ const Header = props => {
       simulate();
     }
   }, [draftStarted]);
+
+  // ! finish settings modal
+  const openModal = e => {
+    changeX(e.currentTarget.offsetLeft);
+    changeY(e.currentTarget.offsetTop + 10);
+    changeModal(true);
+  };
+
+  const closeModal = e => {
+    changeModal(false);
+  };
 
   const getDirection = () => {
     if (currentRound % 2 === 0) return 'left';
@@ -293,12 +357,20 @@ const Header = props => {
     <Container>
       <LeftWrapper>
         <TitleWrapper>
-          <TeamNameWrapper>
-            <TeamName>{teamName}</TeamName>
-            <SettingsLink to="/fantasy/settings">Settings</SettingsLink>
-          </TeamNameWrapper>
-
-          <MainTitle>Draft Central</MainTitle>
+          <TeamName>{teamName}</TeamName>
+          <MainWrapper>
+            <MainTitle>Draft Central</MainTitle>
+            <DotDotDot onClick={openModal}>...</DotDotDot>
+            {isModalOpen && (
+              <SettingsWindow x={x} y={y}>
+                <SettingsList>
+                  <Setting>
+                    <SettingsLink to="/fantasy/settings">Settings</SettingsLink>
+                  </Setting>
+                </SettingsList>
+              </SettingsWindow>
+            )}
+          </MainWrapper>
         </TitleWrapper>
         <OnTheClock
           team={currentTeam}
@@ -323,6 +395,7 @@ const Header = props => {
           {draftStarted ? 'Pause Draft' : 'Start Draft'}
         </Button>
       </RightWrapper>
+      {isModalOpen && <Overlay onClick={closeModal} open={isModalOpen} />}
     </Container>
   );
 };

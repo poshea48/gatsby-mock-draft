@@ -1,5 +1,6 @@
 import React, { useReducer } from 'react';
 import styled from '@emotion/styled';
+import { navigate } from 'gatsby';
 
 const Container = styled.div`
   display: flex;
@@ -246,6 +247,7 @@ const fantasySetup = ({ submit }) => {
       K,
       DSPT,
     });
+    if (keeper) navigate('/fantasy/settings');
   };
   return (
     <Container>

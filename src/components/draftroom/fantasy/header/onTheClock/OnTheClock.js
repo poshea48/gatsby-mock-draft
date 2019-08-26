@@ -14,10 +14,10 @@ const Container = styled.div`
   }
 `;
 
-const Current = styled.div`
+const Display = styled.div`
   display: flex;
   justify-content: flex-start;
-  h6 {
+  h5 {
     margin: 0 1em 0 0;
     @media (max-width: 325px) {
       margin: 0 0.5em 0 0;
@@ -25,25 +25,19 @@ const Current = styled.div`
   }
 `;
 
-const Team = styled.div`
-  p {
-    margin: 0;
-  }
-`;
-
 const OnTheClock = ({ team, round, pick, totalRounds }) => {
   return (
     <Container>
       <Timer />
-      <Current>
-        <h6>
+      <Display>
+        <h5>On the Clock: {(team && team.name) || ''}</h5>
+      </Display>
+      <Display>
+        <h5>
           Round: {round}/{totalRounds}
-        </h6>
-        <h6>Pick: {pick}</h6>
-      </Current>
-      <Team>
-        <p>On the Clock: {(team && team.name) || ''}</p>
-      </Team>
+        </h5>
+        <h5>Pick: {pick}</h5>
+      </Display>
     </Container>
   );
 };
