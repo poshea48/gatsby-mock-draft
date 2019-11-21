@@ -7,7 +7,7 @@ const Container = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  background-color: #040e18;
+  background-color: #1c1d21;
 `;
 const BgImage = styled(Img)`
   position: absolute;
@@ -15,11 +15,11 @@ const BgImage = styled(Img)`
   left: 0;
   width: 100vw;
   height: 100vh;
-  filter: brightness(110%) saturate(2) contrast(70%);
-  ${'' /* background-position: 6% 100%; */}
   & > img {
-    width: 100%:
-    height: 100%:
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
     object-fit: contain !important;
     object-position: right bottom !important;
   }
@@ -40,9 +40,9 @@ const BackgroundImg = ({ children }) => (
   <StaticQuery
     query={graphql`
       query {
-        desktop: file(relativePath: { eq: "josiah-day-619224-unsplash.jpg" }) {
+        desktop: file(relativePath: { eq: "footballPic.png" }) {
           childImageSharp {
-            fluid(maxWidth: 1000, quality: 90) {
+            fluid(maxWidth: 600, quality: 50) {
               ...GatsbyImageSharpFluid_withWebp
             }
           }

@@ -192,7 +192,11 @@ export default (state = initialState, action) => {
         if (keeper.updated) return;
         playerId = keeper.playerId; // get playerId from keeper objec
         player = updatedAvailablePlayers.find(p => p.id === playerId); // get player from avilablePlayers copy
-        team.starters[player.Position][0] = player; // add player into starters
+        if (!team.starters[player.Position]) {
+          team.starters.FLEX[0] = player;
+        } else {
+          team.starters[player.Position][0] = player; // add player into starters
+        }
         team.skipRound = keeper.round; // add a skipRound property so simulate will skip
         updatedAvailablePlayers.splice(
           updatedAvailablePlayers.indexOf(player), // remove player from updatedPlayers

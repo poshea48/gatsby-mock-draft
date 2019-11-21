@@ -266,7 +266,6 @@ const Header = props => {
     }
   }, [draftStarted]);
 
-  // ! finish settings modal
   const openModal = e => {
     changeX(e.currentTarget.offsetLeft);
     changeY(e.currentTarget.offsetTop + 10);
@@ -353,6 +352,8 @@ const Header = props => {
     }
     startDraft();
   };
+
+  //! fix draftStarted when paused
 
   return (
     <Container>
